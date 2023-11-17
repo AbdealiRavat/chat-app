@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "720970031224",
+    "project_id": "the-wall-e0bf3",
+    "storage_bucket": "the-wall-e0bf3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:720970031224:android:7b08acd8826ca0cdd58d8d",
+        "android_client_info": {
+          "package_name": "com.example.quizz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "720970031224-c033dublnpple0jgo4p7q3d4rj3vlkct.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJ46NPNsyB-uTJHz89uyjL2aJ9mTuXSjA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "720970031224-c033dublnpple0jgo4p7q3d4rj3vlkct.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "720970031224-n4u2872f3m1nstsnq8ssvkk7k7qetomf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.quizz"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
