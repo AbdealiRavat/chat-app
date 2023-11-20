@@ -121,8 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ? 'Enter Valid Email'
                                 : authController.isPasswordEmpty.value
                                     ? 'Enter Password'
-                                    : authController
-                                            .errorMessage.value.isNotEmpty
+                                    : authController.errorMessage.value.isNotEmpty
                                         ? "Invalid User Credentials "
                                         : '',
                             style: TextStyle(
@@ -141,8 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                         authController.isPasswordEmpty.value = password.isEmpty;
 
                         if (email.isNotEmpty && password.isNotEmpty) {
-                          authController.signIn(
-                              context, emailTextController, passwordController);
+                          authController.signIn(context, emailTextController, passwordController);
                         }
                       },
                       text: 'Login',
@@ -157,9 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Not a member?',
-                            style: TextStyle(
-                                color: Colors.white.withOpacity(0.7))),
+                        Text('Not a member?', style: TextStyle(color: Colors.white.withOpacity(0.7))),
                         SizedBox(
                           width: 15.w,
                         ),
@@ -167,15 +163,11 @@ class _LoginPageState extends State<LoginPage> {
                             onTap: () {
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) => RegisterPage()),
+                                MaterialPageRoute(builder: (context) => RegisterPage()),
                               );
                             },
                             child: Text('Register here',
-                                style: TextStyle(
-                                    color: white,
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w900))),
+                                style: TextStyle(color: white, fontSize: 16.sp, fontWeight: FontWeight.w900))),
                       ],
                     ),
                   )

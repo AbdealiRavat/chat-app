@@ -86,10 +86,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 Container(
                   padding: EdgeInsets.fromLTRB(20.w, 25.h, 20.w, 0.h),
                   height: 100.h,
-                  decoration: BoxDecoration(
-                      color: bg_purple,
-                      borderRadius:
-                          BorderRadius.vertical(bottom: Radius.circular(25.r))),
+                  decoration: BoxDecoration(color: bg_purple, borderRadius: BorderRadius.vertical(bottom: Radius.circular(25.r))),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -103,61 +100,37 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                               height: 45.h,
                               width: 45.w,
                               decoration: authController.profileImg.isEmpty
-                                  ? Constants.prefs
-                                          .getString(Constants.profileImg)
-                                          .isNotEmpty
+                                  ? Constants.prefs.getString(Constants.profileImg) != null &&
+                                          Constants.prefs.getString(Constants.profileImg).isNotEmpty
                                       ? BoxDecoration(
-                                          border: Border.all(
-                                              width: 1.5.w,
-                                              color: white,
-                                              strokeAlign: BorderSide
-                                                  .strokeAlignOutside),
+                                          border:
+                                              Border.all(width: 1.5.w, color: white, strokeAlign: BorderSide.strokeAlignOutside),
                                           image: DecorationImage(
-                                            image: NetworkImage(Constants.prefs
-                                                .getString(
-                                                    Constants.profileImg)),
+                                            image: NetworkImage(Constants.prefs.getString(Constants.profileImg)),
                                             fit: BoxFit.cover,
                                           ),
                                           shape: BoxShape.circle,
                                           color: white)
-                                      : BoxDecoration(
-                                          color: white.withOpacity(0.9),
-                                          shape: BoxShape.circle)
+                                      : BoxDecoration(color: white.withOpacity(0.9), shape: BoxShape.circle)
                                   : BoxDecoration(
-                                      border: Border.all(
-                                          width: 1.5.w,
-                                          color: white,
-                                          strokeAlign:
-                                              BorderSide.strokeAlignOutside),
+                                      border: Border.all(width: 1.5.w, color: white, strokeAlign: BorderSide.strokeAlignOutside),
                                       image: DecorationImage(
-                                        image: NetworkImage(authController
-                                            .profileImg
-                                            .toString()),
+                                        image: NetworkImage(authController.profileImg.toString()),
                                         fit: BoxFit.cover,
                                       ),
                                       shape: BoxShape.circle,
                                       color: white.withOpacity(0.5)),
-                              child: Constants.prefs
-                                          .getString(Constants.profileImg)
-                                          .toString()
-                                          .isEmpty &&
-                                      Constants.prefs
-                                          .getString(Constants.userName)
-                                          .toString()
-                                          .isNotEmpty
+                              child: Constants.prefs.getString(Constants.profileImg).toString().isEmpty &&
+                                      Constants.prefs.getString(Constants.userName).toString().isNotEmpty
                                   ? Container(
                                       height: 45.h,
                                       width: 45.w,
                                       alignment: Alignment.center,
                                       child: Text(
                                         Constants.userName.isEmpty
-                                            ? authController.userName.value
-                                                .substring(0, 1)
-                                            : Constants.prefs
-                                                .getString(Constants.userName)
-                                                .substring(0, 1),
-                                        style: TextStyle(
-                                            fontSize: 35.sp, color: bg_purple),
+                                            ? authController.userName.value.substring(0, 1)
+                                            : Constants.prefs.getString(Constants.userName).substring(0, 1),
+                                        style: TextStyle(fontSize: 35.sp, color: bg_purple),
                                       ))
                                   : const SizedBox(),
                             ),
@@ -168,11 +141,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       ),
                       InkWell(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const UsersInfoScreen()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const UsersInfoScreen()));
                           },
                           child: Icon(
                             Icons.people,
@@ -183,9 +152,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 ),
                 Expanded(
                   child: StreamBuilder(
-                      stream: FirebaseFirestore.instance
-                          .collection('Users')
-                          .snapshots(),
+                      stream: FirebaseFirestore.instance.collection('Users').snapshots(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return ListView.builder(
@@ -193,80 +160,53 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                               physics: const BouncingScrollPhysics(),
                               itemCount: snapshot.data!.docs.length,
                               itemBuilder: (context, index) {
-                                QueryDocumentSnapshot<Map<String, dynamic>>
-                                    data = snapshot.data!.docs[index];
+                                QueryDocumentSnapshot<Map<String, dynamic>> data = snapshot.data!.docs[index];
                                 return InkWell(
-                                  onTap: () =>
-                                      Get.to(() => ChatScreen(userData: data)),
+                                  onTap: () => Get.to(() => ChatScreen(userData: data)),
                                   child: Container(
                                     // decoration: BoxDecoration(
                                     //     color: Colors.deepPurple.withOpacity(0.2), borderRadius: BorderRadius.circular(18.r)),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 15.w, vertical: 5.h),
-                                    margin: EdgeInsets.symmetric(
-                                        horizontal: 20.w, vertical: 1.h),
+                                    padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 5.h),
+                                    margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 1.h),
                                     child: Row(
                                       children: [
                                         Stack(
                                           children: [
                                             data['profileImg'] != null
                                                 ? ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            30.r),
+                                                    borderRadius: BorderRadius.circular(30.r),
                                                     child: Image.network(
-                                                      data[Constants.profileImg]
-                                                          .toString(),
+                                                      data[Constants.profileImg].toString(),
                                                       fit: BoxFit.cover,
                                                       width: 60.w,
                                                       height: 60.h,
-                                                      loadingBuilder: (BuildContext
-                                                              context,
-                                                          Widget child,
-                                                          ImageChunkEvent?
-                                                              loadingProgress) {
-                                                        if (loadingProgress ==
-                                                            null) return child;
+                                                      loadingBuilder:
+                                                          (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                                        if (loadingProgress == null) return child;
                                                         return Container(
                                                           width: 60.w,
                                                           height: 60.h,
                                                           color: Colors.white,
                                                           child: Center(
-                                                            child:
-                                                                CircularProgressIndicator(
-                                                              color: Colors
-                                                                  .deepPurple,
-                                                              value: loadingProgress
-                                                                          .expectedTotalBytes !=
-                                                                      null
-                                                                  ? loadingProgress
-                                                                          .cumulativeBytesLoaded /
-                                                                      loadingProgress
-                                                                          .expectedTotalBytes!
+                                                            child: CircularProgressIndicator(
+                                                              color: Colors.deepPurple,
+                                                              value: loadingProgress.expectedTotalBytes != null
+                                                                  ? loadingProgress.cumulativeBytesLoaded /
+                                                                      loadingProgress.expectedTotalBytes!
                                                                   : null,
                                                             ),
                                                           ),
                                                         );
                                                       },
-                                                      errorBuilder: (context,
-                                                          object, stackTrace) {
+                                                      errorBuilder: (context, object, stackTrace) {
                                                         return Container(
                                                             height: 60.h,
                                                             width: 60.w,
-                                                            alignment: Alignment
-                                                                .center,
-                                                            color:
-                                                                purple_secondary,
+                                                            alignment: Alignment.center,
+                                                            color: purple_secondary,
                                                             child: Text(
-                                                              data[Constants
-                                                                      .userName]
-                                                                  .toString()
-                                                                  .substring(
-                                                                      0, 1),
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      40.sp,
-                                                                  color: white),
+                                                              data[Constants.userName].toString().substring(0, 1),
+                                                              style: TextStyle(fontSize: 40.sp, color: white),
                                                             ));
                                                       },
                                                     ),
@@ -276,22 +216,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                                     width: 60.w,
                                                     alignment: Alignment.center,
                                                     child: Text(
-                                                      data[Constants.userName]
-                                                          .toString()
-                                                          .substring(0, 1),
-                                                      style: TextStyle(
-                                                          fontSize: 40.sp,
-                                                          color: white),
+                                                      data[Constants.userName].toString().substring(0, 1),
+                                                      style: TextStyle(fontSize: 40.sp, color: white),
                                                     )),
                                             Positioned(
                                               right: 0.w,
                                               child: Icon(
                                                 Icons.circle,
                                                 size: 15.h,
-                                                color:
-                                                    data['status'] == "Online"
-                                                        ? Colors.green
-                                                        : Colors.amber,
+                                                color: data['status'] == "Online" ? Colors.green : Colors.amber,
                                               ),
                                             ),
                                           ],
@@ -302,9 +235,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                                         Expanded(
                                           child: Text(
                                             data['userName'].toString(),
-                                            style: TextStyle(
-                                                fontSize: 18.sp,
-                                                fontWeight: FontWeight.w700),
+                                            style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
                                           ),
                                         ),
                                       ],

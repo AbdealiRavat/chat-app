@@ -147,8 +147,8 @@ class _PostTextFieldState extends State<PostTextField> {
     Reference imageRef = FirebaseStorage.instance
         .ref()
         .child('postImages')
-        .child(FirebaseAuth.instance.currentUser!.email.toString())
-        .child(DateTime.now().toString());
+        .child(FirebaseAuth.instance.currentUser!.uid.toString())
+        .child(DateTime.now().millisecondsSinceEpoch.toString());
     await imageRef.putFile(
         File(image.path),
         SettableMetadata(
@@ -156,7 +156,12 @@ class _PostTextFieldState extends State<PostTextField> {
         ));
     try {
       String imgUrl = await imageRef.getDownloadURL();
-      FirebaseFirestore.instance.collection(Constants.userChats).add({
+      FirebaseFirestore.instance
+          .collection(Constants.userChats)
+          .doc(FirebaseAuth.instance.currentUser!.uid.toString())
+          .collection(FirebaseAuth.instance.currentUser!.uid.toString())
+          .doc(DateTime.now().millisecondsSinceEpoch.toString())
+          .set({
         'UserEmail': FirebaseAuth.instance.currentUser!.email,
         'UserName': userName,
         'Message': '',

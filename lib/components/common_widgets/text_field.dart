@@ -46,8 +46,7 @@ class _MyTextFieldState extends State<MyTextField> {
         },
         style: TextStyle(color: widget.tColor),
         decoration: InputDecoration(
-            contentPadding:
-                EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+            contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
             hintText: widget.hintText,
             suffix: InkWell(
                 onTap: () {
@@ -55,12 +54,8 @@ class _MyTextFieldState extends State<MyTextField> {
                     widget.isHidden = !widget.isHidden;
                   });
                 },
-                child: Icon(
-                    widget.isHidden
-                        ? Icons.visibility
-                        : Icons.visibility_off_rounded,
-                    color:
-                        widget.isPassword ? Colors.white : Colors.transparent)),
+                child: Icon(widget.isHidden ? Icons.visibility : Icons.visibility_off_rounded,
+                    color: widget.isPassword ? Colors.white : Colors.transparent)),
             // IconButton(
             //   padding: EdgeInsets.zero,
             //   onPressed: () {
@@ -73,13 +68,9 @@ class _MyTextFieldState extends State<MyTextField> {
             // ),
             filled: true,
             fillColor: purple_secondary.withOpacity(0.95),
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(25.r)),
+            enabledBorder: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(25.r)),
             focusedBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: white.withOpacity(0.8), width: 0.5),
-                borderRadius: BorderRadius.circular(25.r)),
+                borderSide: BorderSide(color: white.withOpacity(0.8), width: 0.5), borderRadius: BorderRadius.circular(25.r)),
             hintStyle: TextStyle(color: Colors.grey[500])),
       ),
     );

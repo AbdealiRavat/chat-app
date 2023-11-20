@@ -11,12 +11,11 @@ class WallController extends GetxController {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String? userName = prefs.getString('userName');
-    if (textController.text.isNotEmpty &&
-        textController.text.trim().isNotEmpty) {
+    if (textController.text.isNotEmpty && textController.text.trim().isNotEmpty) {
       FirebaseFirestore.instance
           .collection(Constants.userChats)
-          .doc(userData[Constants.userName].toString())
-          .collection(userData[Constants.userName])
+          .doc(FirebaseAuth.instance.currentUser!.uid.toString())
+          .collection(FirebaseAuth.instance.currentUser!.uid.toString())
           .doc(DateTime.now().millisecondsSinceEpoch.toString())
           .set({
         'UserEmail': FirebaseAuth.instance.currentUser!.email,
