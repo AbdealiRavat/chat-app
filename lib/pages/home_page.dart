@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -38,6 +39,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     Constants.initializePref();
 
     Future.microtask(() async {
+      await Constants.initializePref();
       FirebaseAnalytics analytics = FirebaseAnalytics.instance;
       String? token = await FirebaseMessaging.instance.getToken();
       WidgetsBinding.instance.addObserver(this);
@@ -91,50 +93,68 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Obx(() => InkWell(
-                            onTap: () {
-                              Get.to(() => const ProfilePage());
-                              // authController.signOut(context);
-                            },
-                            child: Container(
-                              height: 45.h,
-                              width: 45.w,
-                              decoration: authController.profileImg.isEmpty
-                                  ? Constants.prefs.getString(Constants.profileImg) != null &&
-                                          Constants.prefs.getString(Constants.profileImg).isNotEmpty
-                                      ? BoxDecoration(
-                                          border:
-                                              Border.all(width: 1.5.w, color: white, strokeAlign: BorderSide.strokeAlignOutside),
-                                          image: DecorationImage(
-                                            image: NetworkImage(Constants.prefs.getString(Constants.profileImg)),
-                                            fit: BoxFit.cover,
-                                          ),
-                                          shape: BoxShape.circle,
-                                          color: white)
-                                      : BoxDecoration(color: white.withOpacity(0.9), shape: BoxShape.circle)
-                                  : BoxDecoration(
-                                      border: Border.all(width: 1.5.w, color: white, strokeAlign: BorderSide.strokeAlignOutside),
-                                      image: DecorationImage(
-                                        image: NetworkImage(authController.profileImg.toString()),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      shape: BoxShape.circle,
-                                      color: white.withOpacity(0.5)),
-                              child: Constants.prefs.getString(Constants.profileImg).toString().isEmpty &&
-                                      Constants.prefs.getString(Constants.userName).toString().isNotEmpty
-                                  ? Container(
-                                      height: 45.h,
-                                      width: 45.w,
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        Constants.userName.isEmpty
-                                            ? authController.userName.value.substring(0, 1)
-                                            : Constants.prefs.getString(Constants.userName).substring(0, 1),
-                                        style: TextStyle(fontSize: 35.sp, color: bg_purple),
-                                      ))
-                                  : const SizedBox(),
-                            ),
-                          )),
+                      // Obx(() =>
+                      InkWell(
+                        onTap: () {
+                          Get.to(() => const ProfilePage());
+                          // authController.signOut(context);
+                        },
+                        child: Container(
+                          height: 45.h,
+                          width: 45.w,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50.r),
+                            child: const AspectRatio(
+                                aspectRatio: 1.6,
+                                child: BlurHash(
+                                  hash: 'L5H2EC=PM+yV0g-mq.wG9c010J}I',
+                                  imageFit: BoxFit.cover,
+                                  image:
+                                      'https://firebasestorage.googleapis.com/v0/b/the-wall-e0bf3.appspot.com/o/images%2FIVmddrHqiLMwh1N3t6kXh0JpfKt1?alt=media&token=6eb2402c-a1ea-4215-bb91-65da7427bddc',
+                                )),
+                          ),
+                        ),
+
+                        // Container(
+                        //   height: 45.h,
+                        //   width: 45.w,
+                        //   decoration: BoxDecoration(
+                        //     border: Border.all(width: 1.5.w, color: white, strokeAlign: BorderSide.strokeAlignOutside),
+                        //     shape: BoxShape.circle,
+                        //     color: authController.profileImg.isEmpty ? white.withOpacity(0.9) : white.withOpacity(0.5),
+                        //     image: authController.profileImg.isEmpty
+                        //         ? Constants.prefs != null &&
+                        //                 Constants.prefs.getString(Constants.profileImg) != null &&
+                        //                 Constants.prefs.getString(Constants.profileImg).isNotEmpty
+                        //             ? DecorationImage(
+                        //                 image: NetworkImage(Constants.prefs.getString(Constants.profileImg)!),
+                        //                 fit: BoxFit.cover,
+                        //               )
+                        //             : null
+                        //         : DecorationImage(
+                        //             image: NetworkImage(authController.profileImg.toString()),
+                        //             fit: BoxFit.cover,
+                        //           ),
+                        //   ),
+                        //   child: (Constants.prefs != null &&
+                        //           Constants.prefs.getString(Constants.profileImg).toString().isEmpty &&
+                        //           Constants.prefs.getString(Constants.userName).toString().isNotEmpty)
+                        //       ? Container(
+                        //           height: 45.h,
+                        //           width: 45.w,
+                        //           alignment: Alignment.center,
+                        //           child: Text(
+                        //             Constants.userName.isEmpty
+                        //                 ? authController.userName.value.substring(0, 1)
+                        //                 : Constants.prefs.getString(Constants.userName).substring(0, 1),
+                        //             style: TextStyle(fontSize: 35.sp, color: bg_purple),
+                        //           ),
+                        //         )
+                        //       : const SizedBox(),
+                        // )
+                      )
+                      // )
+                      ,
                       Text(
                         'Let\'s Chat',
                         style: TextStyle(color: white, fontSize: 18.sp),

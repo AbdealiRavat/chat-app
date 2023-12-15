@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../pages/auth_pages/login_page.dart';
+import '../auth/auth_pages/login_page.dart';
 import '../pages/home_page.dart';
 import '../utlis/constants.dart';
 
@@ -32,9 +32,7 @@ class AuthController extends GetxController {
     isLoading(true);
     try {
       await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: emailTextController.text.trim(),
-              password: passwordController.text.trim())
+          .signInWithEmailAndPassword(email: emailTextController.text.trim(), password: passwordController.text.trim())
           .then((value) async {
         FirebaseFirestore.instance
             .collection('Users')
@@ -49,12 +47,10 @@ class AuthController extends GetxController {
 
           profileImg(data['profileImg'] ?? "");
           userName(data['userName'].toString().capitalizeFirst ?? "");
-          await Constants.prefs
-              .setString(Constants.userName, data['userName'] ?? "");
+          await Constants.prefs.setString(Constants.userName, data['userName'] ?? "");
           await Constants.prefs.setString(Constants.email, data['email'] ?? "");
           await Constants.prefs.setString(Constants.bio, data['bio'] ?? "");
-          await Constants.prefs
-              .setString(Constants.profileImg, data['profileImg'] ?? "");
+          await Constants.prefs.setString(Constants.profileImg, data['profileImg'] ?? "");
         });
         isLoading(false);
         await Get.offAll(() => const HomePage());
@@ -66,24 +62,17 @@ class AuthController extends GetxController {
     }
   }
 
-  void signUp(context, emailTextController, passwordController,
-      confirmPasswordController) async {
+  void signUp(context, emailTextController, passwordController, confirmPasswordController) async {
     // showDialog(context: context, builder: (context) => Loader());
 
     isLoading(true);
     try {
       UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: emailTextController.text.trim(),
-              password: passwordController.text.trim());
-      String userName =
-          emailTextController.text.toString().capitalizeFirst!.split('@')[0];
+          .createUserWithEmailAndPassword(email: emailTextController.text.trim(), password: passwordController.text.trim());
+      String userName = emailTextController.text.toString().capitalizeFirst!.split('@')[0];
       String email = emailTextController.text.trim();
 
-      await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(userCredential.user!.uid)
-          .set({
+      await FirebaseFirestore.instance.collection('Users').doc(userCredential.user!.uid).set({
         'email': email,
         'userName': userName,
         'bio': '',
@@ -92,6 +81,7 @@ class AuthController extends GetxController {
         'status': 'Offline',
         'isFirstTime': true,
         'isSuperAdmin': false,
+        'id': FirebaseAuth.instance.currentUser!.uid
       }).then((value) async {
         Fluttertoast.showToast(
             msg: "User Registered Successfully",
@@ -111,16 +101,12 @@ class AuthController extends GetxController {
     }
   }
 
-  editUserName(
-      String field, Map<String, dynamic> userData, userNameController) async {
+  editUserName(String field, Map<String, dynamic> userData, userNameController) async {
     isNameEdit.value = !isNameEdit.value;
 
     if (!isNameEdit.value) {
       if (userNameController.text.isNotEmpty) {
-        FirebaseFirestore.instance
-            .collection("Users")
-            .doc(FirebaseAuth.instance.currentUser!.email)
-            .update({
+        FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser!.uid).update({
           field: userNameController.text.trim(),
         }).then((value) async {
           Fluttertoast.showToast(
@@ -144,10 +130,7 @@ class AuthController extends GetxController {
 
     if (!isBioEdit.value) {
       if (bioController.text.isNotEmpty) {
-        FirebaseFirestore.instance
-            .collection("Users")
-            .doc(FirebaseAuth.instance.currentUser!.email)
-            .update({
+        FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser!.uid).update({
           field: bioController.text.trimRight().trimLeft(),
         }).then((value) async {
           Fluttertoast.showToast(
@@ -168,17 +151,15 @@ class AuthController extends GetxController {
   getData(userNameController, bioController) async {
     userName.value = await Constants.prefs.getString(Constants.userName);
     bio.value = await Constants.prefs.getString(Constants.bio);
-    userNameController.text =
-        Constants.prefs.getString(Constants.userName).toString();
+    userNameController.text = Constants.prefs.getString(Constants.userName).toString();
     bioController.text = Constants.prefs.getString(Constants.bio).toString();
   }
 
   setStatus(String status) {
     if (FirebaseAuth.instance.currentUser != null) {
-      FirebaseFirestore.instance
-          .collection("Users")
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .update({'status': status});
+      FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+        'status': status,
+      });
     }
   }
 
@@ -193,8 +174,7 @@ class AuthController extends GetxController {
   }
 
   getImage(type, context) async {
-    var image = await ImagePicker().pickImage(
-        source: type == 'Camera' ? ImageSource.camera : ImageSource.gallery);
+    var image = await ImagePicker().pickImage(source: type == 'Camera' ? ImageSource.camera : ImageSource.gallery);
     // File? imageFile;
     // if (image != null) {
     //   imageFile = File(image.path);
@@ -206,10 +186,7 @@ class AuthController extends GetxController {
     if (image == null) return;
     Get.back();
 
-    Reference imageRef = FirebaseStorage.instance
-        .ref()
-        .child('images')
-        .child(FirebaseAuth.instance.currentUser!.email.toString());
+    Reference imageRef = FirebaseStorage.instance.ref().child('images').child(FirebaseAuth.instance.currentUser!.uid.toString());
     await imageRef.putFile(
         File(image.path),
         SettableMetadata(
@@ -219,10 +196,7 @@ class AuthController extends GetxController {
       imgUrl.value = await imageRef.getDownloadURL();
       Constants.prefs.setString(Constants.profileImg, imgUrl.toString());
       profileImg(imgUrl.value);
-      await FirebaseFirestore.instance
-          .collection("Users")
-          .doc(FirebaseAuth.instance.currentUser!.email)
-          .update({
+      await FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser!.uid).update({
         'profileImg': imgUrl.value,
       });
     } catch (e) {

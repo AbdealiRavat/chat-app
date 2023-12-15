@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,10 @@ class _ProfilePageState extends State<ProfilePage> {
   AuthController authController = Get.put(AuthController());
   @override
   void initState() {
-    Future.microtask(() => authController.getData(userNameController, bioController));
+    Future.microtask(() async {
+      await Constants.initializePref();
+      authController.getData(userNameController, bioController);
+    });
     super.initState();
   }
 
@@ -34,7 +38,11 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile Page'),
+        title: const Text(
+          'Profile Page',
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
         backgroundColor: bg_purple,
         elevation: 0,
       ),
@@ -62,84 +70,39 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: Stack(
                             alignment: Alignment.bottomRight,
                             children: [
-                              // Container(
-                              //   height: 120.h,
-                              //   width: 120.w,
-                              //   decoration: Constants.profileImg.isNotEmpty
-                              //       ? Constants.prefs.getString(Constants.profileImg).isEmpty || authController.profileImg.isEmpty
-                              //           ? const BoxDecoration(color: Colors.grey, shape: BoxShape.circle)
-                              //           : BoxDecoration(
-                              //               border:
-                              //                   Border.all(width: 3.w, color: white, strokeAlign: BorderSide.strokeAlignOutside),
+                              buildProfileImage(),
+                              // Constants.prefs != null && profileImgUrl != null && profileImgUrl.toString().isNotEmpty
+                              //     ? ClipRRect(
+                              //         borderRadius: BorderRadius.circular(60.r),
+                              //         child: CachedNetworkImage(
+                              //           imageUrl: profileImgUrl,
+                              //           imageBuilder: (context, imageProvider) => Container(
+                              //             width: 120.w,
+                              //             height: 120.h,
+                              //             decoration: BoxDecoration(
+                              //               border: Border.all(
+                              //                   width: 1.5.w, color: white, strokeAlign: BorderSide.strokeAlignOutside),
                               //               image: DecorationImage(
-                              //                 image: NetworkImage(Constants.prefs.getString(Constants.profileImg)),
+                              //                 image: imageProvider,
                               //                 fit: BoxFit.cover,
                               //               ),
                               //               shape: BoxShape.circle,
-                              //               color: Colors.white)
-                              //       : const BoxDecoration(color: Colors.grey, shape: BoxShape.circle),
-                              //   child:
-                              //       Constants.prefs.getString(Constants.profileImg).isEmpty || authController.profileImg.isEmpty
-                              //           ? Container(
-                              //               height: 120.h,
-                              //               width: 120.w,
-                              //               alignment: Alignment.center,
-                              //               child: Text(
-                              //                 Constants.prefs.getString(Constants.userName).toString().substring(0, 1),
-                              //                 style: TextStyle(fontSize: 80.sp, color: Colors.white),
-                              //               ))
-                              //           : const SizedBox(),
-                              // ),
-                              Constants.prefs.getString(Constants.profileImg) != null &&
-                                      Constants.prefs.getString(Constants.profileImg).toString().isNotEmpty
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(60.r),
-                                      child: Image.network(
-                                        Constants.prefs.getString(Constants.profileImg),
-                                        fit: BoxFit.cover,
-                                        width: 120.w,
-                                        height: 120.h,
-                                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                                          if (loadingProgress == null) return child;
-                                          return Container(
-                                            width: 120.w,
-                                            height: 120.h,
-                                            color: Colors.white,
-                                            child: Center(
-                                              child: CircularProgressIndicator(
-                                                color: Colors.deepPurple,
-                                                value: loadingProgress.expectedTotalBytes != null
-                                                    ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                                                    : null,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        errorBuilder: (context, object, stackTrace) {
-                                          return Container(
-                                              height: 120.h,
-                                              width: 120.w,
-                                              alignment: Alignment.center,
-                                              color: white,
-                                              child: Text(
-                                                Constants.prefs.getString(Constants.userName).toString().substring(0, 1),
-                                                style: TextStyle(fontSize: 80.sp, color: purple_text),
-                                              ));
-                                        },
-                                      ),
-                                    )
-                                  : ClipRRect(
-                                      borderRadius: BorderRadius.circular(60.r),
-                                      child: Container(
-                                          height: 120.h,
-                                          width: 120.w,
-                                          alignment: Alignment.center,
-                                          color: white,
-                                          child: Text(
-                                            Constants.prefs.getString(Constants.userName).toString().substring(0, 1),
-                                            style: TextStyle(fontSize: 80.sp, color: purple_text),
-                                          )),
-                                    ),
+                              //               color: white,
+                              //             ),
+                              //           ),
+                              //         ))
+                              //     : ClipRRect(
+                              //         borderRadius: BorderRadius.circular(60.r),
+                              //         child: Container(
+                              //             height: 120.h,
+                              //             width: 120.w,
+                              //             alignment: Alignment.center,
+                              //             color: white,
+                              //             child: Text(
+                              //               Constants.prefs.getString(Constants.userName).toString().substring(0, 1),
+                              //               style: TextStyle(fontSize: 80.sp, color: purple_text),
+                              //             )),
+                              //       ),
                               InkWell(
                                 onTap: showBottomSheet,
                                 child: Container(
@@ -283,5 +246,52 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
+  }
+
+  Widget buildProfileImage() {
+    String? profileImgUrl = Constants.prefs.getString(Constants.profileImg);
+
+    if (profileImgUrl != null && Uri.parse(profileImgUrl).isAbsolute) {
+      print("Loading image from URL: $profileImgUrl");
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(80.r),
+        child: CachedNetworkImage(
+          imageUrl: profileImgUrl,
+          imageBuilder: (context, imageProvider) => Container(
+            width: 120.h,
+            height: 120.h,
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 1.5.w,
+                color: white,
+                strokeAlign: BorderSide.strokeAlignOutside,
+              ),
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+              ),
+              shape: BoxShape.circle,
+              color: white,
+            ),
+          ),
+        ),
+      );
+    } else {
+      print("Invalid or null image URL");
+      // Handle the case where the URL is invalid or null
+      // For example, show a placeholder image or default text
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(60.r),
+        child: Container(
+            height: 120.h,
+            width: 120.w,
+            alignment: Alignment.center,
+            color: white,
+            child: Text(
+              Constants.prefs.getString(Constants.userName).toString().substring(0, 1),
+              style: TextStyle(fontSize: 80.sp, color: purple_text),
+            )),
+      ); // Placeholder or default image
+    }
   }
 }

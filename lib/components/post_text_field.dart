@@ -17,7 +17,17 @@ class PostTextField extends StatefulWidget {
   final FocusNode? focusNode;
   final String hintText;
   Function()? onPressed;
-  PostTextField({super.key, required this.controller, required this.hintText, required this.focusNode, required this.onPressed});
+  String? chatId;
+  String? msgTo;
+  PostTextField({
+    super.key,
+    required this.controller,
+    required this.hintText,
+    required this.focusNode,
+    required this.onPressed,
+    required this.chatId,
+    required this.msgTo,
+  });
 
   @override
   State<PostTextField> createState() => _PostTextFieldState();
@@ -147,7 +157,7 @@ class _PostTextFieldState extends State<PostTextField> {
     Reference imageRef = FirebaseStorage.instance
         .ref()
         .child('postImages')
-        .child(FirebaseAuth.instance.currentUser!.uid.toString())
+        .child(widget.chatId.toString())
         .child(DateTime.now().millisecondsSinceEpoch.toString());
     await imageRef.putFile(
         File(image.path),
@@ -158,16 +168,15 @@ class _PostTextFieldState extends State<PostTextField> {
       String imgUrl = await imageRef.getDownloadURL();
       FirebaseFirestore.instance
           .collection(Constants.userChats)
-          .doc(FirebaseAuth.instance.currentUser!.uid.toString())
-          .collection(FirebaseAuth.instance.currentUser!.uid.toString())
+          .doc(widget.chatId.toString())
+          .collection(widget.chatId.toString())
           .doc(DateTime.now().millisecondsSinceEpoch.toString())
           .set({
-        'UserEmail': FirebaseAuth.instance.currentUser!.email,
-        'UserName': userName,
+        'msgFrom': FirebaseAuth.instance.currentUser!.uid,
+        'msgTo': widget.msgTo.toString(),
         'Message': '',
         'imgMessage': imgUrl,
         'TimeStamp': Timestamp.now(),
-        'Likes': [],
       });
     } catch (e) {
       print(e.toString());

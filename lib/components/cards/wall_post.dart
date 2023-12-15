@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
-import '../../utlis/colors.dart';
-
 class WallPost extends StatefulWidget {
   final String message;
-  final String user;
-  final String userName;
+  final String currentUser;
+  final String rcvUser;
+  // final String userName;
   final String postId;
   // List<String> likes;
   // final bool isLiked;
@@ -20,14 +19,15 @@ class WallPost extends StatefulWidget {
   WallPost({
     super.key,
     required this.message,
-    required this.user,
+    required this.currentUser,
+    required this.rcvUser,
     required this.postId,
     // required this.likes,
     // required this.isLiked,
     required this.timeStamp,
     required this.showTime,
     required this.imgPost,
-    required this.userName,
+    // required this.userName,
   });
 
   @override
@@ -57,9 +57,9 @@ class _WallPostState extends State<WallPost> {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: (currentUser.email == widget.user ? Alignment.topRight : Alignment.topLeft),
+      alignment: (currentUser.uid == widget.currentUser ? Alignment.topRight : Alignment.topLeft),
       child: Column(
-        crossAxisAlignment: currentUser.email == widget.user ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment: currentUser.uid == widget.currentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
             constraints: BoxConstraints(
@@ -67,12 +67,12 @@ class _WallPostState extends State<WallPost> {
               minWidth: MediaQuery.sizeOf(context).width * 0.15,
             ),
             decoration: BoxDecoration(
-                color: currentUser.email == widget.user ? Colors.deepPurple.shade100 : Colors.white,
+                color: currentUser.uid == widget.currentUser ? Colors.deepPurple.shade100 : Colors.white,
                 boxShadow: [
                   BoxShadow(
                       color: Colors.blueGrey.shade50,
-                      blurRadius: currentUser.email == widget.user ? 0 : 3,
-                      offset: currentUser.email == widget.user ? const Offset(0, 0) : const Offset(0.8, 1.1),
+                      blurRadius: currentUser.uid == widget.currentUser ? 0 : 3,
+                      offset: currentUser.uid == widget.currentUser ? const Offset(0, 0) : const Offset(0.8, 1.1),
                       spreadRadius: 0.1)
                 ],
                 borderRadius: BorderRadius.circular(10.r)),
@@ -87,15 +87,15 @@ class _WallPostState extends State<WallPost> {
               children: [
                 IntrinsicWidth(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-                  currentUser.email == widget.user
-                      ? const SizedBox()
-                      : Padding(
-                          padding: EdgeInsets.only(bottom: 12.h, left: 2.w),
-                          child: Text(widget.userName,
-                              style: TextStyle(
-                                color: deep_purple,
-                              )),
-                        ),
+                  // currentUser.uid == widget.currentUser
+                  //     ? const SizedBox()
+                  //     : Padding(
+                  //         padding: EdgeInsets.only(bottom: 12.h, left: 2.w),
+                  //         child: Text(widget.userName,
+                  //             style: TextStyle(
+                  //               color: deep_purple,
+                  //             )),
+                  //       ),
                   widget.imgPost.isEmpty
                       ? Text(
                           widget.message.toString(),
