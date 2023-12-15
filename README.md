@@ -15,13 +15,30 @@ A simple chatting app built with Flutter for the frontend and Firebase for the b
 - **Flutter Toast:** Display toast notifications in the app.
 - **Shared Preferences:** Store and retrieve simple data locally.
 
-## Dependencies
-firebase_core
-firebase_auth
-cloud_firestore
-firebase_messaging
-fluttertoast
-shared_preferences
-get
-image_picker
-cached_network_image
+## Getting Started
+
+To run this project locally, follow these steps:
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/AbdealiRavat/chat-app.git
+   cd chat-app
+
+2. **Fetch the dependencies:**
+   ```
+   flutter pub get
+   ```
+   
+3. **Run the app:**
+    
+   ```
+   flutter run
+   ```
+
+## Configuration
+
+Make sure to configure Firebase Authentication and Cloud Firestore in your Firebase project. Update the Firebase configurations in the app accordingly.
+
+## License
+
+User Info app is released under the [MIT License](https://opensource.org/licenses/MIT). Feel free to use, modify, and distribute the app according to the terms of this license.
