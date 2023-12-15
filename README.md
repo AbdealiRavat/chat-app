@@ -1,4 +1,4 @@
-# THE WALL
+# CHAT APP
 
 A simple chatting app built with Flutter for the frontend and Firebase for the backend, enabling users to chat with individuals.
 
