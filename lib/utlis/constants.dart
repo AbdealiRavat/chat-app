@@ -7,8 +7,9 @@ class Constants {
   static String email = 'email';
   static String bio = 'bio';
   static String profileImg = 'profileImg';
-  static String userChats = 'UserChats';
-  static String users = 'Users';
+  static String userChats = 'userChats';
+  static String users = 'users';
+  static String timeStamp = 'timeStamp';
   // static String profileImg = 'profileImg';
   // static String profileImg = 'profileImg';
 

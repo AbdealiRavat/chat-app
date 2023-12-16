@@ -1,4 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chat_app/models/message_model.dart';
+import 'package:chat_app/models/user_model.dart';
+import 'package:chat_app/pages/user_info_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,9 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../components/cards/wall_post.dart';
-import '../components/common_widgets/alert_box.dart';
 import '../components/loaders/loader.dart';
 import '../components/post_text_field.dart';
 import '../controllers/auth_controller.dart';
@@ -17,7 +20,7 @@ import '../utlis/colors.dart';
 import '../utlis/constants.dart';
 
 class ChatScreen extends StatefulWidget {
-  QueryDocumentSnapshot<Map<String, dynamic>> userData;
+  UserModel userData;
   ChatScreen({super.key, required this.userData});
 
   @override
@@ -36,7 +39,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    wallController.generateChatId(currentUser.currentUser!.uid, widget.userData['id']);
+    wallController.generateChatId(currentUser.currentUser!.uid, widget.userData.id);
     Future.microtask(() async {
       FirebaseAnalytics analytics = FirebaseAnalytics.instance;
       // String? token = await FirebaseMessaging.instance.getToken();
@@ -66,224 +69,196 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
       ),
-      child: Scaffold(
-        backgroundColor: Colors.grey[200],
-
-        body:
-            // Column(
-            // children: [
-            // Expanded(
-            //   child:
-            Stack(
-          children: [
-            Positioned(
-              right: 0,
-              top: 0,
-              height: MediaQuery.sizeOf(context).height,
-              child: Image.asset(
-                'asset/bg.jpg',
-                height: 150.h,
-
-                fit: BoxFit.cover,
-                // height: MediaQuery.sizeOf(context).height * 1,
-                // width: MediaQuery.sizeOf(context).height * 1,
-              ),
-            ),
-            Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-                  alignment: Alignment.bottomCenter,
-                  height: 90.h,
-                  decoration: BoxDecoration(color: bg_purple, borderRadius: BorderRadius.vertical(bottom: Radius.circular(15.r))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          // Get.to(() => const ProfilePage());
-                        },
-                        child: buildProfileImage(),
-                      ),
-                      SizedBox(
-                        width: 20.w,
-                      ),
-                      Text(
-                        widget.userData[Constants.userName],
-                        style: TextStyle(color: white, fontSize: 18.sp),
-                      ),
-                    ],
-                  ),
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.grey[200],
+          body:
+              // Column(
+              // children: [
+              // Expanded(
+              //   child:
+              Stack(
+            children: [
+              Positioned(
+                right: 0,
+                top: 0,
+                height: MediaQuery.sizeOf(context).height,
+                child: Image.asset(
+                  'asset/bg.jpg',
+                  // height: 150.h,
+                  fit: BoxFit.cover,
                 ),
-                Expanded(
-                  child: Obx(() => StreamBuilder(
-                        stream: FirebaseFirestore.instance
-                            .collection(Constants.userChats)
-                            .doc(wallController.chatId.value)
-                            .collection(wallController.chatId.value)
-                            .orderBy("TimeStamp", descending: true)
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return snapshot.data!.docs.isEmpty
-                                ? Center(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        const Text(
-                                          'No Data Found!',
-                                          style: TextStyle(fontSize: 25, color: Colors.black, fontWeight: FontWeight.w400),
-                                        ),
-                                        const SizedBox(
-                                          height: 15,
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-                                            focusNode.requestFocus();
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.all(8),
-                                            decoration: BoxDecoration(color: deep_purple, borderRadius: BorderRadius.circular(5)),
-                                            child: Text(
-                                              'Start Conversation',
-                                              style: TextStyle(fontSize: 16.sp, color: Colors.white),
+              ),
+              Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+                    decoration:
+                        BoxDecoration(color: bg_purple, borderRadius: BorderRadius.vertical(bottom: Radius.circular(25.r))),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                Get.to(() => UserInfoScreen(
+                                      userData: widget.userData,
+                                    ));
+                              },
+                              child: buildProfileImage(),
+                            ),
+                            SizedBox(
+                              width: 20.w,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  widget.userData.userName.toString(),
+                                  style: TextStyle(color: white, fontSize: 18.sp, fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  widget.userData.status == 'Online'
+                                      ? widget.userData.status.toString()
+                                      : DateFormat('hh:mm a').format(DateTime.parse(widget.userData.status.toString())),
+                                  style: TextStyle(color: white, fontSize: 14.sp),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                        Icon(
+                          Icons.more_vert_rounded,
+                          color: white,
+                        )
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Obx(() => StreamBuilder(
+                          stream: FirebaseFirestore.instance
+                              .collection(Constants.userChats)
+                              .doc(wallController.chatId.value)
+                              .collection(wallController.chatId.value)
+                              .orderBy(Constants.timeStamp, descending: true)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              List<MessageModel> chatData = [];
+                              snapshot.data!.docs.forEach((element) {
+                                chatData.add(MessageModel.fromJson(element.data()));
+                              });
+                              return chatData.isEmpty
+                                  ? Center(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          const Text(
+                                            'No Data Found!',
+                                            style: TextStyle(fontSize: 25, color: Colors.black, fontWeight: FontWeight.w400),
+                                          ),
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              focusNode.requestFocus();
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.all(8),
+                                              decoration:
+                                                  BoxDecoration(color: deep_purple, borderRadius: BorderRadius.circular(5)),
+                                              child: Text(
+                                                'Start Conversation',
+                                                style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                : ScrollConfiguration(
-                                    behavior: MyBehavior(),
-                                    child: ListView.builder(
-                                        padding: EdgeInsets.only(top: 10.h),
-                                        shrinkWrap: true,
-                                        reverse: true,
-                                        itemCount: snapshot.data!.docs.length,
-                                        controller: listViewController,
-                                        itemBuilder: (context, index) {
-                                          final post = snapshot.data!.docs[index];
-
-                                          return InkWell(
-                                            onLongPress: () {
-                                              if (widget.userData['isSuperAdmin']) {
-                                                showGeneralDialog(
-                                                    context: context,
-                                                    transitionBuilder: (context, a1, a2, widget) {
-                                                      return Transform.scale(
-                                                        scale: a1.value,
-                                                        child: Opacity(
-                                                          opacity: a1.value,
-                                                          child: widget,
-                                                        ),
-                                                      );
-                                                    },
-                                                    pageBuilder: (context, a1, a2) => AlertBox(onTap: () {
-                                                          Navigator.pop(context);
-                                                          FirebaseFirestore.instance
-                                                              .collection("User Posts")
-                                                              .doc(post.id)
-                                                              .delete();
-                                                        }));
-                                              }
-                                            },
-                                            onTap: () {
-                                              setState(() {});
-                                              showTime = !showTime;
-                                            },
-                                            child: WallPost(
-                                              message: post['Message'] ?? '',
-                                              imgPost: post['imgMessage'] ?? '',
-                                              currentUser: post['msgFrom'],
-                                              rcvUser: post['msgTo'],
-                                              // userName: post['UserName'],
-                                              timeStamp: post['TimeStamp'],
-                                              showTime: showTime,
-                                              postId: post.id,
-                                              // likes: List<String>.from(post['Likes'] ?? []),
-                                              // isLiked: post['Likes'].contains(currentUser.currentUser!.email),
-                                            ),
-                                          );
-                                        }),
-                                  );
-                          } else if (snapshot.hasError) {
-                            return const Center(child: Text('Error'));
-                          }
-                          return const Center(child: Loader());
-                        },
-                      )),
-                ),
-                PostTextField(
-                    controller: textController,
-                    focusNode: focusNode,
-                    hintText: 'Enter Message',
-                    onPressed: () {
-                      wallController.postMessage(textController, widget.userData);
-                      scrollDown();
-                    },
-                    chatId: wallController.chatId.value,
-                    msgTo: widget.userData['id'])
-              ],
-            ),
-          ],
+                                        ],
+                                      ),
+                                    )
+                                  : ScrollConfiguration(
+                                      behavior: MyBehavior(),
+                                      child: ListView.builder(
+                                          padding: EdgeInsets.only(top: 10.h),
+                                          shrinkWrap: true,
+                                          reverse: true,
+                                          itemCount: chatData.length,
+                                          controller: listViewController,
+                                          itemBuilder: (context, index) {
+                                            return InkWell(
+                                              // onLongPress: () {
+                                              //   if (widget.userData['isSuperAdmin']) {
+                                              //     showGeneralDialog(
+                                              //         context: context,
+                                              //         transitionBuilder: (context, a1, a2, widget) {
+                                              //           return Transform.scale(
+                                              //             scale: a1.value,
+                                              //             child: Opacity(
+                                              //               opacity: a1.value,
+                                              //               child: widget,
+                                              //             ),
+                                              //           );
+                                              //         },
+                                              //         pageBuilder: (context, a1, a2) => AlertBox(onTap: () {
+                                              //               Navigator.pop(context);
+                                              //               FirebaseFirestore.instance
+                                              //                   .collection("User Posts")
+                                              //                   .doc(post.id)
+                                              //                   .delete();
+                                              //             }));
+                                              //   }
+                                              // },
+                                              onTap: () {
+                                                setState(() {});
+                                                showTime = !showTime;
+                                              },
+                                              child: WallPost(
+                                                message: chatData[index].message.toString(),
+                                                imgPost: chatData[index].imgMessage.toString(),
+                                                currentUser: chatData[index].msgFrom.toString(),
+                                                rcvUser: chatData[index].msgTo.toString(),
+                                                timeStamp: chatData[index].timeStamp.toString(),
+                                                showTime: showTime,
+                                                postId: chatData[index].id.toString(),
+                                                // likes: List<String>.from(post['Likes'] ?? []),
+                                                // isLiked: post['Likes'].contains(currentUser.currentUser!.email),
+                                              ),
+                                            );
+                                          }),
+                                    );
+                            } else if (snapshot.hasError) {
+                              return const Center(child: Text('Error'));
+                            }
+                            return const Center(child: Loader());
+                          },
+                        )),
+                  ),
+                  PostTextField(
+                      controller: textController,
+                      focusNode: focusNode,
+                      hintText: 'Enter Message',
+                      onPressed: () {
+                        wallController.postMessage(textController, widget.userData);
+                        scrollDown();
+                      },
+                      chatId: wallController.chatId.value,
+                      msgTo: widget.userData.id)
+                ],
+              ),
+            ],
+          ),
         ),
-        // ),
-        // const SizedBox(
-        //   height: 30,
-        // ),
-        // RatingBar(
-        //   initialRating: 3,
-        //   minRating: 0,
-        //   direction: Axis.horizontal,
-        //   allowHalfRating: true,
-        //   itemCount: 5,
-        //   glow: true,
-        //   // ignoreGestures: true,
-        //   ratingWidget: RatingWidget(
-        //     full: Icon(
-        //       Icons.star,
-        //       color: Colors.amber,
-        //     ),
-        //     half: Icon(
-        //       Icons.star_half,
-        //       color: Colors.amber,
-        //     ),
-        //     empty: Icon(
-        //       Icons.star_border,
-        //       color: Colors.amber,
-        //     ),
-        //   ),
-        //   onRatingUpdate: (rating) {
-        //     print(rating);
-        //   },
-        // ),
-        // const SizedBox(
-        //   height: 30,
-        // ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: [
-        //     const Text('Hello'),
-        //     const SizedBox(
-        //       width: 20,
-        //     ),
-        //     Text(currentUser.email.toString()),
-        //   ],
-        // ),
-        // ],
-        // ),
       ),
     );
   }
 
   Widget buildProfileImage() {
-    final profileImgUrl = widget.userData.data().containsKey(Constants.profileImg)
-        ? widget.userData.data()[Constants.profileImg]?.toString()
-        : null;
+    final profileImgUrl = widget.userData.profileImg ?? null;
 
     if (profileImgUrl != null && Uri.parse(profileImgUrl).isAbsolute) {
-      print("Profile Image URL: $profileImgUrl");
-
       return CachedNetworkImage(
         imageUrl: profileImgUrl,
         imageBuilder: (context, imageProvider) => Container(
@@ -305,15 +280,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         errorWidget: (context, url, error) => const Icon(Icons.error),
       );
     } else {
-      print("Profile Image URL: $profileImgUrl");
-
       return Container(
         height: 45.h,
         width: 45.w,
         alignment: Alignment.center,
         decoration: BoxDecoration(color: white.withOpacity(0.9), shape: BoxShape.circle),
         child: Text(
-          widget.userData[Constants.userName].toString().substring(0, 1),
+          widget.userData.userName.toString().substring(0, 1),
           style: TextStyle(fontSize: 35.sp, color: bg_purple),
         ),
       );

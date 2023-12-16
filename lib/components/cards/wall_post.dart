@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,11 +7,8 @@ class WallPost extends StatefulWidget {
   final String message;
   final String currentUser;
   final String rcvUser;
-  // final String userName;
   final String postId;
-  // List<String> likes;
-  // final bool isLiked;
-  final Timestamp timeStamp;
+  final String timeStamp;
   bool showTime;
   String imgPost;
 
@@ -22,12 +18,9 @@ class WallPost extends StatefulWidget {
     required this.currentUser,
     required this.rcvUser,
     required this.postId,
-    // required this.likes,
-    // required this.isLiked,
     required this.timeStamp,
     required this.showTime,
     required this.imgPost,
-    // required this.userName,
   });
 
   @override
@@ -83,7 +76,7 @@ class _WallPostState extends State<WallPost> {
                 : EdgeInsets.symmetric(horizontal: 6.w, vertical: 6.h),
             margin: EdgeInsets.only(left: 16.w, right: 16.w, top: 6.h, bottom: 6.h),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 IntrinsicWidth(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
@@ -116,24 +109,40 @@ class _WallPostState extends State<WallPost> {
                           ),
                         ),
                 ])),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      // timeago.format(widget.timeStamp.toDate(), allowFromNow: true),
+                      DateFormat('h:mm a').format(DateTime.parse(widget.timeStamp)),
+                      style: TextStyle(
+                          fontStyle: FontStyle.italic, fontSize: 10.sp, fontWeight: FontWeight.w400, color: Colors.grey.shade700),
+                    ),
+                    SizedBox(
+                      width: 5.w,
+                    ),
+                    currentUser.uid == widget.currentUser
+                        ? Icon(
+                            true ? Icons.done_rounded : Icons.done_all_rounded,
+                            size: 15.w,
+                            color: true ? Colors.deepPurple : Colors.blueAccent,
+                          )
+                        : SizedBox()
+                  ],
+                )
               ],
             ),
           ),
           // widget.showTime
-          //     ? SizedBox(
-          //         height: 0.h,
+          //     ? Padding(
+          //         padding: EdgeInsets.symmetric(horizontal: 18.w),
+          //         child: Text(
+          //           // timeago.format(widget.timeStamp.toDate(), allowFromNow: true),
+          //           DateFormat('MMM d, h:mm a').format(widget.timeStamp.toDate()),
+          //           style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w400, color: Colors.grey.shade700),
+          //         ),
           //       )
-          //     : SizedBox(),
-          widget.showTime
-              ? Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 18.w),
-                  child: Text(
-                    // timeago.format(widget.timeStamp.toDate(), allowFromNow: true),
-                    DateFormat('MMM d, h:mm a').format(widget.timeStamp.toDate()),
-                    style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w400, color: Colors.grey.shade700),
-                  ),
-                )
-              : const SizedBox(),
+          //     : const SizedBox(),
         ],
       ),
     );

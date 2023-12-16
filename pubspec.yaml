@@ -25,7 +25,6 @@ dependencies:
   cached_network_image: ^3.3.0
   fluttertoast: ^8.2.4
   flutter_launcher_icons: ^0.13.1
-  flutter_blurhash: ^0.8.2
 
 dev_dependencies:
   flutter_test:

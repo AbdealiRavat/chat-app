@@ -53,59 +53,104 @@
 //     );
 //   }
 // }
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
+
+import 'package:chat_app/utlis/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import '../pages/home_page.dart';
 import 'auth_pages/login_page.dart';
 
-class AuthPage extends StatelessWidget {
+class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
+
+  @override
+  State<AuthPage> createState() => _AuthPageState();
+}
+
+class _AuthPageState extends State<AuthPage> {
+  @override
+  void initState() {
+    Timer(Duration(seconds: 2), () {
+      checkSignIn();
+    });
+    super.initState();
+  }
+
+  checkSignIn() {
+    if (FirebaseAuth.instance.currentUser != null) {
+      Get.offAll(() => HomePage());
+    } else {
+      Get.offAll(() => LoginPage());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            //   Still waiting for the authentication state to be determined.
-            return const Center(
-                child: CircularProgressIndicator(
-              color: Colors.deepPurple,
-              backgroundColor: Colors.transparent,
-            )); // You can replace this with a loading indicator.
-          }
+        resizeToAvoidBottomInset: true,
+        backgroundColor: purple_secondary,
+        body: Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'asset/logo.png',
+              width: 100.h,
+              fit: BoxFit.cover,
+            ),
+            SizedBox(
+              height: 30.h,
+            ),
+            Text(
+              'The Wall',
+              style: TextStyle(fontSize: 35.sp, color: white),
+            ),
+            // CircularProgressIndicator(
+            //   color: Colors.deepPurple,
+            //   backgroundColor: Colors.transparent,
+            // ),
+          ],
+        ))
 
-          if (snapshot.hasData && snapshot.data != null) {
-            return FutureBuilder(
-              future: FirebaseFirestore.instance.collection("Users").doc(snapshot.data!.uid).get(),
-              builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> docSnapshot) {
-                if (docSnapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.deepPurple,
-                      backgroundColor: Colors.transparent,
-                    ),
-                  ); // Loading indicator while fetching data.
-                }
-
-                final data = docSnapshot.data?.data() as Map<String, dynamic>;
-
-                if (data['isFirstTime'] == true) {
-                  return const LoginPage();
-                } else {
-                  return const HomePage();
-                }
-              },
-            );
-          } else {
-            return const LoginPage();
-          }
-        },
-      ),
-    );
+        // StreamBuilder(
+        //   stream: FirebaseAuth.instance.authStateChanges(),
+        //   builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
+        //     if (snapshot.connectionState == ConnectionState.waiting) {
+        //       // Still waiting for the authentication state to be determined.
+        //       return const
+        //     }
+        //
+        //     if (snapshot.connectionState == ConnectionState.active) {
+        //       return FutureBuilder(
+        //         future: FirebaseFirestore.instance.collection("Users").doc(FirebaseAuth.instance.currentUser!.uid).get(),
+        //         builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> docSnapshot) {
+        //           if (docSnapshot.connectionState == ConnectionState.waiting) {
+        //             return const Center(
+        //               child: CircularProgressIndicator(
+        //                 color: Colors.deepPurple,
+        //                 backgroundColor: Colors.transparent,
+        //               ),
+        //             ); // Loading indicator while fetching data.
+        //           }
+        //
+        //           final data = docSnapshot.data?.data() as Map<String, dynamic>;
+        //
+        //           if (data != null && data['isFirstTime'] == true) {
+        //             return const LoginPage();
+        //           } else {
+        //             return const HomePage();
+        //           }
+        //         },
+        //       );
+        //     } else {
+        //       return Container();
+        //     }
+        //   },
+        // ),
+        );
   }
 }

@@ -89,11 +89,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   MyTextField(
                     controller: emailTextController,
                     hintText: 'Email',
-                    focusNode: emailFocusNode,
-                    focusChange: () {
-                      emailFocusNode.unfocus();
-                      FocusScope.of(context).requestFocus(passwordFocusNode);
-                    },
+                    // focusNode: emailFocusNode,
+                    // focusChange: () {
+                    //   emailFocusNode.unfocus();
+                    //   FocusScope.of(context).requestFocus(passwordFocusNode);
+                    // },
                     tColor: Colors.white,
                     obscureText: false,
                     isHidden: false,
@@ -102,12 +102,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   MyTextField(
                     controller: passwordController,
                     hintText: 'Password',
-                    focusNode: passwordFocusNode,
-                    focusChange: () {
-                      passwordFocusNode.unfocus();
-                      FocusScope.of(context)
-                          .requestFocus(confirmPasswordFocusNode);
-                    },
+                    // focusNode: passwordFocusNode,
+                    // focusChange: () {
+                    //   passwordFocusNode.unfocus();
+                    //   FocusScope.of(context)
+                    //       .requestFocus(confirmPasswordFocusNode);
+                    // },
                     tColor: Colors.white,
                     obscureText: true,
                     isHidden: true,
@@ -134,10 +134,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                     ? 'Enter Password'
                                     : !authController.didPasswordMatch.value
                                         ? 'Password didn\'t match'
-                                        : authController
-                                                .errorMessage.value.isNotEmpty
-                                            ? authController.errorMessage.value
-                                                .toString()
+                                        : authController.errorMessage.value.isNotEmpty
+                                            ? authController.errorMessage.value.toString()
                                             : '',
                             style: TextStyle(
                               color: Colors.amberAccent,
@@ -150,20 +148,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         onTap: () {
                           final email = emailTextController.text.trim();
                           final password = passwordController.text;
-                          final confirmPassword =
-                              confirmPasswordController.text;
+                          final confirmPassword = confirmPasswordController.text;
 
                           authController.isEmailEmpty.value = email.isEmpty;
-                          authController.isPasswordEmpty.value =
-                              password.isEmpty;
-                          authController.didPasswordMatch.value =
-                              (password == confirmPassword);
+                          authController.isPasswordEmpty.value = password.isEmpty;
+                          authController.didPasswordMatch.value = (password == confirmPassword);
 
-                          if (email.isNotEmpty &&
-                              password.isNotEmpty &&
-                              (password == confirmPassword)) {
-                            authController.signUp(context, emailTextController,
-                                passwordController, confirmPasswordController);
+                          if (email.isNotEmpty && password.isNotEmpty && (password == confirmPassword)) {
+                            authController.signUp(context, emailTextController, passwordController, confirmPasswordController);
                           }
                         },
                         text: 'Sign Up',
@@ -179,23 +171,17 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Already a member?',
-                            style: TextStyle(
-                                color: Colors.white.withOpacity(0.7))),
+                        Text('Already a member?', style: TextStyle(color: Colors.white.withOpacity(0.7))),
                         SizedBox(width: 15.w),
                         InkWell(
                             onTap: () {
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) => LoginPage()),
+                                MaterialPageRoute(builder: (context) => LoginPage()),
                               );
                             },
-                            child: Text('Login here',
-                                style: TextStyle(
-                                    color: white,
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w900))),
+                            child:
+                                Text('Login here', style: TextStyle(color: white, fontSize: 16.sp, fontWeight: FontWeight.w900))),
                       ],
                     ),
                   )

@@ -7,8 +7,8 @@ import '../../utlis/colors.dart';
 
 class MyTextField extends StatefulWidget {
   TextEditingController? controller;
-  final FocusNode? focusNode;
-  final Function? focusChange;
+  // final FocusNode? focusNode;
+  // final Function? focusChange;
   final String hintText;
   final dynamic tColor;
   final bool obscureText;
@@ -17,8 +17,8 @@ class MyTextField extends StatefulWidget {
   MyTextField(
       {super.key,
       this.controller,
-      this.focusNode,
-      this.focusChange,
+      // this.focusNode,
+      // this.focusChange,
       required this.hintText,
       required this.tColor,
       required this.obscureText,
@@ -40,10 +40,10 @@ class _MyTextFieldState extends State<MyTextField> {
       child: TextField(
         controller: widget.controller,
         obscureText: widget.isPassword ? widget.isHidden : false,
-        focusNode: widget.focusNode,
-        onEditingComplete: () {
-          widget.focusChange!();
-        },
+        // focusNode: widget.focusNode,
+        // onEditingComplete: () {
+        //   widget.focusChange!();
+        // },
         style: TextStyle(color: widget.tColor),
         decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),

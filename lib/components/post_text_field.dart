@@ -1,16 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 
-import '../utlis/constants.dart';
+import '../controllers/wall_controller.dart';
 
 class PostTextField extends StatefulWidget {
   final TextEditingController controller;
@@ -34,6 +28,7 @@ class PostTextField extends StatefulWidget {
 }
 
 class _PostTextFieldState extends State<PostTextField> {
+  WallController wallController = Get.put(WallController());
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -129,7 +124,7 @@ class _PostTextFieldState extends State<PostTextField> {
     return Expanded(
       child: InkWell(
         onTap: () async {
-          await getImage(type);
+          await wallController.getImage(type, widget.msgTo!);
         },
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 25.h, horizontal: 15.w),
@@ -145,41 +140,5 @@ class _PostTextFieldState extends State<PostTextField> {
         ),
       ),
     );
-  }
-
-  getImage(type) async {
-    var image = await ImagePicker().pickImage(source: type == 'Camera' ? ImageSource.camera : ImageSource.gallery);
-
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? userName = prefs.getString('userName');
-    if (image == null) return;
-    Navigator.pop(context);
-    Reference imageRef = FirebaseStorage.instance
-        .ref()
-        .child('postImages')
-        .child(widget.chatId.toString())
-        .child(DateTime.now().millisecondsSinceEpoch.toString());
-    await imageRef.putFile(
-        File(image.path),
-        SettableMetadata(
-          contentType: "image/jpeg",
-        ));
-    try {
-      String imgUrl = await imageRef.getDownloadURL();
-      FirebaseFirestore.instance
-          .collection(Constants.userChats)
-          .doc(widget.chatId.toString())
-          .collection(widget.chatId.toString())
-          .doc(DateTime.now().millisecondsSinceEpoch.toString())
-          .set({
-        'msgFrom': FirebaseAuth.instance.currentUser!.uid,
-        'msgTo': widget.msgTo.toString(),
-        'Message': '',
-        'imgMessage': imgUrl,
-        'TimeStamp': Timestamp.now(),
-      });
-    } catch (e) {
-      print(e.toString());
-    }
   }
 }
