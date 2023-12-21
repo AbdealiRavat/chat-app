@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../controllers/wall_controller.dart';
+import '../utlis/colors.dart';
 
 class PostTextField extends StatefulWidget {
   final TextEditingController controller;
@@ -33,8 +34,6 @@ class _PostTextFieldState extends State<PostTextField> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 10.w),
-      // height: 60.h,
-      // width: 330.w,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -45,7 +44,7 @@ class _PostTextFieldState extends State<PostTextField> {
               cursorOpacityAnimates: true,
               controller: widget.controller,
               focusNode: widget.focusNode,
-              style: TextStyle(color: Colors.black, overflow: TextOverflow.fade),
+              style: TextStyle(color: black, overflow: TextOverflow.fade),
               decoration: InputDecoration(
                   contentPadding: EdgeInsets.only(
                     left: 20.w,
@@ -53,7 +52,7 @@ class _PostTextFieldState extends State<PostTextField> {
                     bottom: 10.h,
                   ),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: white,
                   hintText: widget.hintText,
                   suffixIcon: Padding(
                     padding: EdgeInsets.symmetric(vertical: 15.0.h, horizontal: 20.w),
@@ -62,12 +61,12 @@ class _PostTextFieldState extends State<PostTextField> {
                         child: Icon(
                           Icons.camera_alt_rounded,
                           size: 25.h,
-                          color: Colors.black,
+                          color: black,
                         )),
                   ),
                   enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Colors.deepPurple,
+                        color: deep_purple,
                       ),
                       borderRadius: BorderRadius.circular(30.r)),
                   focusedBorder: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(25.r)),
@@ -81,11 +80,11 @@ class _PostTextFieldState extends State<PostTextField> {
               child: Container(
                   // height: 25.h,
                   padding: EdgeInsets.all(15.w),
-                  decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.deepPurple),
+                  decoration: BoxDecoration(shape: BoxShape.circle, color: deep_purple),
                   child: Icon(
                     Icons.send,
                     size: 25.h,
-                    color: Colors.white,
+                    color: white,
                   )),
             ),
           )
@@ -129,12 +128,12 @@ class _PostTextFieldState extends State<PostTextField> {
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 25.h, horizontal: 15.w),
           decoration: BoxDecoration(
-              color: Colors.deepPurple.withOpacity(0.1),
-              border: Border.all(width: 1, color: Colors.deepPurple),
+              color: deep_purple.withOpacity(0.1),
+              border: Border.all(width: 1, color: deep_purple),
               borderRadius: BorderRadius.circular(25.r)),
           child: Image.asset(
             imgPath,
-            color: Colors.deepPurple,
+            color: deep_purple,
             height: 35.h,
           ),
         ),

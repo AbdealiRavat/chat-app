@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/models/message_model.dart';
 import 'package:chat_app/models/user_model.dart';
-import 'package:chat_app/pages/user_info_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,12 +11,14 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../components/cards/wall_post.dart';
+import '../components/common_widgets/alert_box.dart';
 import '../components/loaders/loader.dart';
 import '../components/post_text_field.dart';
 import '../controllers/auth_controller.dart';
 import '../controllers/wall_controller.dart';
 import '../utlis/colors.dart';
 import '../utlis/constants.dart';
+import 'chat_user_profile_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   UserModel userData;
@@ -66,18 +67,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
+      value: SystemUiOverlayStyle(
+        statusBarColor: bg_purple,
       ),
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.grey[200],
-          body:
-              // Column(
-              // children: [
-              // Expanded(
-              //   child:
-              Stack(
+          body: Stack(
             children: [
               Positioned(
                 right: 0,
@@ -85,7 +81,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                 height: MediaQuery.sizeOf(context).height,
                 child: Image.asset(
                   'asset/bg.jpg',
-                  // height: 150.h,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -96,43 +91,55 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                     decoration:
                         BoxDecoration(color: bg_purple, borderRadius: BorderRadius.vertical(bottom: Radius.circular(25.r))),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Get.to(() => UserInfoScreen(
-                                      userData: widget.userData,
-                                    ));
-                              },
-                              child: buildProfileImage(),
-                            ),
-                            SizedBox(
-                              width: 20.w,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  widget.userData.userName.toString(),
-                                  style: TextStyle(color: white, fontSize: 18.sp, fontWeight: FontWeight.w600),
-                                ),
-                                Text(
-                                  widget.userData.status == 'Online'
-                                      ? widget.userData.status.toString()
-                                      : DateFormat('hh:mm a').format(DateTime.parse(widget.userData.status.toString())),
-                                  style: TextStyle(color: white, fontSize: 14.sp),
-                                )
-                              ],
-                            ),
-                          ],
+                        InkWell(
+                          onTap: () => Get.back(),
+                          child: Icon(
+                            Icons.arrow_back_ios,
+                            color: white,
+                            size: 25.w,
+                          ),
                         ),
-                        Icon(
-                          Icons.more_vert_rounded,
-                          color: white,
-                        )
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Get.to(() => ChatUserProfileScreen(
+                                  userData: widget.userData,
+                                ));
+                          },
+                          child: Row(
+                            children: [
+                              buildProfileImage(),
+                              SizedBox(
+                                width: 20.w,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    widget.userData.userName.toString(),
+                                    style: TextStyle(color: white, fontSize: 18.sp, fontWeight: FontWeight.w600),
+                                  ),
+                                  Text(
+                                    widget.userData.status == 'Online'
+                                        ? widget.userData.status.toString()
+                                        : DateFormat('hh:mm a').format(DateTime.parse(widget.userData.status.toString())),
+                                    style: TextStyle(color: white, fontSize: 14.sp),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Icon(
+                        //   Icons.more_vert_rounded,
+                        //   color: white,
+                        //   size: 25.w,
+                        // )
                       ],
                     ),
                   ),
@@ -189,32 +196,32 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                           controller: listViewController,
                                           itemBuilder: (context, index) {
                                             return InkWell(
-                                              // onLongPress: () {
-                                              //   if (widget.userData['isSuperAdmin']) {
-                                              //     showGeneralDialog(
-                                              //         context: context,
-                                              //         transitionBuilder: (context, a1, a2, widget) {
-                                              //           return Transform.scale(
-                                              //             scale: a1.value,
-                                              //             child: Opacity(
-                                              //               opacity: a1.value,
-                                              //               child: widget,
-                                              //             ),
-                                              //           );
-                                              //         },
-                                              //         pageBuilder: (context, a1, a2) => AlertBox(onTap: () {
-                                              //               Navigator.pop(context);
-                                              //               FirebaseFirestore.instance
-                                              //                   .collection("User Posts")
-                                              //                   .doc(post.id)
-                                              //                   .delete();
-                                              //             }));
-                                              //   }
-                                              // },
-                                              onTap: () {
-                                                setState(() {});
-                                                showTime = !showTime;
+                                              onLongPress: () {
+                                                showGeneralDialog(
+                                                    context: context,
+                                                    transitionBuilder: (context, a1, a2, widget) {
+                                                      return Transform.scale(
+                                                        scale: a1.value,
+                                                        child: Opacity(
+                                                          opacity: a1.value,
+                                                          child: widget,
+                                                        ),
+                                                      );
+                                                    },
+                                                    pageBuilder: (context, a1, a2) => AlertBox(onTap: () {
+                                                          Navigator.pop(context);
+                                                          FirebaseFirestore.instance
+                                                              .collection(Constants.userChats)
+                                                              .doc(wallController.chatId.value)
+                                                              .collection(wallController.chatId.value)
+                                                              .doc(chatData[index].timeStamp)
+                                                              .delete();
+                                                        }));
                                               },
+                                              // onTap: () {
+                                              //   setState(() {});
+                                              //   showTime = !showTime;
+                                              // },
                                               child: WallPost(
                                                 message: chatData[index].message.toString(),
                                                 imgPost: chatData[index].imgMessage.toString(),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import '../models/user_model.dart';
 import '../utlis/colors.dart';
@@ -17,8 +18,17 @@ class UsersListScreen extends StatelessWidget {
             'Users List',
             style: TextStyle(color: white),
           ),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15.r), bottomRight: Radius.circular(15.r))),
+          leading: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: GestureDetector(
+              onTap: () => Get.back(),
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: white,
+              ),
+            ),
+          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(bottom: Radius.circular(25.r))),
           backgroundColor: bg_purple,
           elevation: 0,
           centerTitle: true,

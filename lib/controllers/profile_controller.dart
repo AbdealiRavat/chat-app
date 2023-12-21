@@ -97,7 +97,7 @@ class ProfileController extends GetxController {
       profileImg(imgUrl.value);
       await FirebaseFirestore.instance.collection(Constants.users).doc(FirebaseAuth.instance.currentUser!.uid).update({
         'profileImg': imgUrl.value,
-      }).then((value) => isLoading.value = true);
+      }).then((value) => isLoading.value = false);
     } catch (e) {
       print(e.toString());
     }

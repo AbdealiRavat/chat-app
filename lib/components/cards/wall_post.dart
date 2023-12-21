@@ -49,6 +49,9 @@ class _WallPostState extends State<WallPost> {
 
   @override
   Widget build(BuildContext context) {
+    var format = DateFormat('h:mm a');
+    var date = DateTime.fromMillisecondsSinceEpoch(int.parse(widget.timeStamp) * 1000);
+
     return Align(
       alignment: (currentUser.uid == widget.currentUser ? Alignment.topRight : Alignment.topLeft),
       child: Column(
@@ -114,7 +117,7 @@ class _WallPostState extends State<WallPost> {
                   children: [
                     Text(
                       // timeago.format(widget.timeStamp.toDate(), allowFromNow: true),
-                      DateFormat('h:mm a').format(DateTime.parse(widget.timeStamp)),
+                      format.format(date),
                       style: TextStyle(
                           fontStyle: FontStyle.italic, fontSize: 10.sp, fontWeight: FontWeight.w400, color: Colors.grey.shade700),
                     ),

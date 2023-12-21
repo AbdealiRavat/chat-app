@@ -66,14 +66,14 @@ class AuthController extends GetxController {
       String userName = emailTextController.text.toString().capitalizeFirst!.split('@')[0];
       String email = emailTextController.text.trim();
       UserModel userData = UserModel(
-        id: FirebaseAuth.instance.currentUser!.uid,
-        userName: userName,
-        bio: '',
-        email: email,
-        profileImg: '',
-        status: DateTime.now().toString(),
-        timeStamp: DateTime.now().toString(),
-      );
+          id: FirebaseAuth.instance.currentUser!.uid,
+          userName: userName,
+          bio: '',
+          email: email,
+          profileImg: '',
+          status: DateTime.now().toString(),
+          timeStamp: DateTime.now().toString(),
+          chattingWith: null);
       await FirebaseFirestore.instance
           .collection(Constants.users)
           .doc(userCredential.user!.uid)

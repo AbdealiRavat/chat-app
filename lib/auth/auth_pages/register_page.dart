@@ -8,7 +8,6 @@ import '../../components/common_widgets/button.dart';
 import '../../components/common_widgets/text_field.dart';
 import '../../controllers/auth_controller.dart';
 import '../../utlis/colors.dart';
-import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   // final Function()? onTap;
@@ -175,10 +174,11 @@ class _RegisterPageState extends State<RegisterPage> {
                         SizedBox(width: 15.w),
                         InkWell(
                             onTap: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(builder: (context) => LoginPage()),
-                              );
+                              Get.offAll(() => RegisterPage());
+                              // Navigator.pushReplacement(
+                              //   context,
+                              //   MaterialPageRoute(builder: (context) => LoginPage()),
+                              // );
                             },
                             child:
                                 Text('Login here', style: TextStyle(color: white, fontSize: 16.sp, fontWeight: FontWeight.w900))),

@@ -161,10 +161,11 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         InkWell(
                             onTap: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(builder: (context) => RegisterPage()),
-                              );
+                              Get.offAll(() => RegisterPage());
+                              // Navigator.pushReplacement(
+                              //   context,
+                              //   MaterialPageRoute(builder: (context) => RegisterPage()),
+                              // );
                             },
                             child: Text('Register here',
                                 style: TextStyle(color: white, fontSize: 16.sp, fontWeight: FontWeight.w900))),

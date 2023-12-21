@@ -12,6 +12,7 @@ import '../utlis/constants.dart';
 
 class WallController extends GetxController {
   RxString chatId = "".obs;
+  RxList usersList = [].obs;
 
   generateChatId(currentUserId, peerId) {
     if (currentUserId.compareTo(peerId) > 0) {
@@ -22,21 +23,42 @@ class WallController extends GetxController {
   }
 
   postMessage(textController, UserModel userData) async {
+    var timeStamp = DateTime.now().millisecondsSinceEpoch.toString();
     MessageModel messageModel = MessageModel(
-        id: chatId.value,
+        id: timeStamp,
         message: textController.text.trimLeft().trimRight(),
         imgMessage: '',
         msgFrom: FirebaseAuth.instance.currentUser!.uid,
         msgTo: userData.id.toString(),
-        timeStamp: DateTime.now().toString(),
+        timeStamp: timeStamp,
         isRead: false);
     if (textController.text.isNotEmpty && textController.text.trim().isNotEmpty) {
       FirebaseFirestore.instance
           .collection(Constants.userChats)
           .doc(chatId.value)
           .collection(chatId.value)
-          .doc(DateTime.now().millisecondsSinceEpoch.toString())
+          .doc(timeStamp)
           .set(messageModel.toJson());
+
+      // await FirebaseFirestore.instance
+      //     .collection(Constants.users)
+      //     .doc(FirebaseAuth.instance.currentUser!.uid)
+      //     .get()
+      //     .then((DocumentSnapshot doc) async {
+      //   UserModel user = UserModel.fromJson(doc.data() as Map<String, dynamic>);
+      // });
+
+      // ChattingWith temp = ChattingWith(lastMessageTime: timeStamp, userId: userData.id.toString());
+      //
+      // FirebaseFirestore.instance.collection(Constants.users).doc(FirebaseAuth.instance.currentUser!.uid).update({
+      //   'chattingWith': FieldValue.arrayUnion([temp.toJson()])
+      // });
+      //
+      // ChattingWith temp2 = ChattingWith(lastMessageTime: timeStamp, userId: FirebaseAuth.instance.currentUser!.uid);
+      //
+      // FirebaseFirestore.instance.collection(Constants.users).doc(userData.id).update({
+      //   'chattingWith': FieldValue.arrayUnion([temp2.toJson()])
+      // });
       print('message posted');
       textController.clear();
     }
