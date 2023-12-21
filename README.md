@@ -2,7 +2,8 @@
 
 A simple chatting app built with Flutter for the frontend and Firebase for the backend, enabling users to chat with individuals.
 
-![i](https://github.com/AbdealiRavat/chat-app/assets/71277590/0d154911-0848-4734-b4f3-95eb2f5b939e) ![t](https://github.com/AbdealiRavat/chat-app/assets/71277590/d6bed401-517a-446b-83dc-32aca8c7d8a7) ![e](https://github.com/AbdealiRavat/chat-app/assets/71277590/08414108-3768-40f7-83dc-fde9c7f4f0d8) ![w](https://github.com/AbdealiRavat/chat-app/assets/71277590/6ae4e336-744d-4905-82ea-8a619f1f8d2c) ![o](https://github.com/AbdealiRavat/chat-app/assets/71277590/1748dedb-0056-4055-a3f7-d0e0247367e1)
+![i](https://github.com/AbdealiRavat/chat-app/assets/71277590/0d154911-0848-4734-b4f3-95eb2f5b939e) ![t](https://github.com/AbdealiRavat/chat-app/assets/71277590/d6bed401-517a-446b-83dc-32aca8c7d8a7) ![e](https://github.com/AbdealiRavat/chat-app/assets/71277590/08414108-3768-40f7-83dc-fde9c7f4f0d8) 
+![w](https://github.com/AbdealiRavat/chat-app/assets/71277590/6ae4e336-744d-4905-82ea-8a619f1f8d2c) ![o](https://github.com/AbdealiRavat/chat-app/assets/71277590/1748dedb-0056-4055-a3f7-d0e0247367e1)
 
 
 ## Features
