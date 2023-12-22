@@ -4,6 +4,7 @@ import 'package:chat_app/models/message_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -59,22 +60,19 @@ class WallController extends GetxController {
       // FirebaseFirestore.instance.collection(Constants.users).doc(userData.id).update({
       //   'chattingWith': FieldValue.arrayUnion([temp2.toJson()])
       // });
-      print('message posted');
+      // print('message posted');
       textController.clear();
     }
   }
 
   getImage(type, String msgTo) async {
+    var timeStamp = DateTime.now().millisecondsSinceEpoch.toString();
     var image = await ImagePicker().pickImage(source: type == 'Camera' ? ImageSource.camera : ImageSource.gallery);
 
     if (image == null) return;
     Get.back();
 
-    Reference imageRef = FirebaseStorage.instance
-        .ref()
-        .child('postImages')
-        .child(chatId.toString())
-        .child(DateTime.now().millisecondsSinceEpoch.toString());
+    Reference imageRef = FirebaseStorage.instance.ref().child('postImages').child(chatId.toString()).child(timeStamp);
     await imageRef.putFile(
         File(image.path),
         SettableMetadata(
@@ -88,16 +86,17 @@ class WallController extends GetxController {
           imgMessage: imgUrl,
           msgFrom: FirebaseAuth.instance.currentUser!.uid,
           msgTo: msgTo.toString(),
-          timeStamp: DateTime.now().toString(),
+          timeStamp: timeStamp,
           isRead: false);
       FirebaseFirestore.instance
           .collection(Constants.userChats)
           .doc(chatId.toString())
           .collection(chatId.toString())
-          .doc(DateTime.now().millisecondsSinceEpoch.toString())
+          .doc(timeStamp)
           .set(messageModel.toJson());
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
+      const Center(child: Text('error'));
     }
   }
 }

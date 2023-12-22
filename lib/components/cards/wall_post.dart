@@ -34,19 +34,6 @@ class _WallPostState extends State<WallPost> {
     super.initState();
   }
 
-  // void toggleLike() {
-  //   DocumentReference postRef = FirebaseFirestore.instance.collection('User Posts').doc(widget.postId);
-  //   if (!widget.isLiked) {
-  //     postRef.update({
-  //       'Likes': FieldValue.arrayUnion([currentUser.email])
-  //     });
-  //   } else {
-  //     postRef.update({
-  //       'Likes': FieldValue.arrayRemove([currentUser.email])
-  //     });
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     var format = DateFormat('h:mm a');
@@ -72,8 +59,6 @@ class _WallPostState extends State<WallPost> {
                       spreadRadius: 0.1)
                 ],
                 borderRadius: BorderRadius.circular(10.r)),
-            // padding: EdgeInsets.all(16),
-            //
             padding: widget.imgPost.isEmpty
                 ? EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h)
                 : EdgeInsets.symmetric(horizontal: 6.w, vertical: 6.h),
@@ -83,15 +68,6 @@ class _WallPostState extends State<WallPost> {
               children: [
                 IntrinsicWidth(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-                  // currentUser.uid == widget.currentUser
-                  //     ? const SizedBox()
-                  //     : Padding(
-                  //         padding: EdgeInsets.only(bottom: 12.h, left: 2.w),
-                  //         child: Text(widget.userName,
-                  //             style: TextStyle(
-                  //               color: deep_purple,
-                  //             )),
-                  //       ),
                   widget.imgPost.isEmpty
                       ? Text(
                           widget.message.toString(),
@@ -112,6 +88,7 @@ class _WallPostState extends State<WallPost> {
                           ),
                         ),
                 ])),
+                SizedBox(height: widget.imgPost.isEmpty ? 1.h : 5.h),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -130,22 +107,14 @@ class _WallPostState extends State<WallPost> {
                             size: 15.w,
                             color: true ? Colors.deepPurple : Colors.blueAccent,
                           )
-                        : SizedBox()
+                        : SizedBox(
+                            width: 0.w,
+                          )
                   ],
                 )
               ],
             ),
           ),
-          // widget.showTime
-          //     ? Padding(
-          //         padding: EdgeInsets.symmetric(horizontal: 18.w),
-          //         child: Text(
-          //           // timeago.format(widget.timeStamp.toDate(), allowFromNow: true),
-          //           DateFormat('MMM d, h:mm a').format(widget.timeStamp.toDate()),
-          //           style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w400, color: Colors.grey.shade700),
-          //         ),
-          //       )
-          //     : const SizedBox(),
         ],
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -71,17 +72,19 @@ class UsersListTile extends StatelessWidget {
                     width: 20.h,
                   ),
                   Text(
-                    userData.userName.toString(),
+                    userData.id == FirebaseAuth.instance.currentUser!.uid
+                        ? '${userData.userName} (You)'
+                        : userData.userName.toString(),
                     style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
               Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.deepPurple,
                   shape: BoxShape.circle,
                 ),
-                padding: EdgeInsets.all(8.w),
+                padding: EdgeInsets.all(6.w),
                 child: Text(
                   '',
                   style: TextStyle(color: Colors.white, fontSize: 14.sp),

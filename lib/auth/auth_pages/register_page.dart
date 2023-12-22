@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:chat_app/auth/auth_pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -88,11 +89,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   MyTextField(
                     controller: emailTextController,
                     hintText: 'Email',
-                    // focusNode: emailFocusNode,
-                    // focusChange: () {
-                    //   emailFocusNode.unfocus();
-                    //   FocusScope.of(context).requestFocus(passwordFocusNode);
-                    // },
+                    focusNode: emailFocusNode,
+                    focusChange: () {
+                      emailFocusNode.unfocus();
+                      FocusScope.of(context).requestFocus(passwordFocusNode);
+                    },
                     tColor: Colors.white,
                     obscureText: false,
                     isHidden: false,
@@ -101,12 +102,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   MyTextField(
                     controller: passwordController,
                     hintText: 'Password',
-                    // focusNode: passwordFocusNode,
-                    // focusChange: () {
-                    //   passwordFocusNode.unfocus();
-                    //   FocusScope.of(context)
-                    //       .requestFocus(confirmPasswordFocusNode);
-                    // },
+                    focusNode: passwordFocusNode,
+                    focusChange: () {
+                      passwordFocusNode.unfocus();
+                      FocusScope.of(context).requestFocus(confirmPasswordFocusNode);
+                    },
                     tColor: Colors.white,
                     obscureText: true,
                     isHidden: true,
@@ -115,10 +115,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   MyTextField(
                       controller: confirmPasswordController,
                       hintText: 'Confirm Password',
-                      // focusNode: confirmPasswordFocusNode,
-                      // focusChange: () {
-                      //   confirmPasswordFocusNode.unfocus();
-                      // },
+                      focusNode: confirmPasswordFocusNode,
+                      focusChange: () {
+                        confirmPasswordFocusNode.unfocus();
+                      },
                       tColor: Colors.white,
                       obscureText: true,
                       isHidden: true,
@@ -174,7 +174,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         SizedBox(width: 15.w),
                         InkWell(
                             onTap: () {
-                              Get.offAll(() => RegisterPage());
+                              Get.offAll(() => LoginPage());
                               // Navigator.pushReplacement(
                               //   context,
                               //   MaterialPageRoute(builder: (context) => LoginPage()),

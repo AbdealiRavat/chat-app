@@ -68,7 +68,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> {
                 final data = snapshot.data;
                 var timeStamp = data?.data()?['timeStamp'];
                 var formatTimeStamp = DateFormat('MMMM dd, yyyy').format(DateTime.parse(timeStamp));
-                print(data?.data()?['timeStamp']);
+                // print(data?.data()?['timeStamp']);
                 return ListView(
                   shrinkWrap: true,
                   physics: const BouncingScrollPhysics(),
@@ -126,7 +126,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> {
                             child: Stack(
                               alignment: Alignment.bottomRight,
                               children: [
-                                Container(width: 120.h, height: 120.h, child: buildProfileImage()),
+                                SizedBox(width: 120.h, height: 120.h, child: buildProfileImage()),
                                 InkWell(
                                   onTap: showBottomSheet,
                                   child: Container(
@@ -238,15 +238,17 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                SizedBox(
+                  width: 10.w,
+                ),
                 iconsButton('asset/camera.png', 'Camera'),
                 SizedBox(
-                  width: 10.w,
+                  width: 50.w,
                 ),
                 iconsButton('asset/gallery.png', 'Gallery'),
                 SizedBox(
                   width: 10.w,
                 ),
-                iconsButton('asset/gallery.png', 'Gallery'),
               ],
             ),
           );
@@ -317,7 +319,7 @@ class _CurrentUserProfilePageState extends State<CurrentUserProfilePage> {
             borderRadius: BorderRadius.circular(100.r),
           ),
           child: Text(
-            Constants.prefs.getString(Constants.userName).toString().substring(0, 1),
+            Constants.prefs.getString(Constants.userName).substring(0, 1) ?? '',
             style: TextStyle(fontSize: 80.sp, color: purple_text),
           )); // Placeholder or default image
     }

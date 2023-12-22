@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/models/message_model.dart';
 import 'package:chat_app/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,7 +28,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
-  final currentUser = FirebaseAuth.instance;
+  final currentUser = FirebaseAuth.instance.currentUser;
   TextEditingController textController = TextEditingController();
   ScrollController listViewController = ScrollController();
   String? data;
@@ -40,17 +39,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    wallController.generateChatId(currentUser.currentUser!.uid, widget.userData.id);
+    wallController.generateChatId(currentUser!.uid, widget.userData.id);
     Future.microtask(() async {
-      FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+      // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
       // String? token = await FirebaseMessaging.instance.getToken();
       WidgetsBinding.instance.addObserver(this);
       Constants.initializePref();
-      // var temp = await FirebaseStorage.instance.ref().child('defaultImg').child('3135715.png').getDownloadURL();
-      // setState(() {
-      //   data = temp;
-      // });
-      // print(token.toString());
     });
     super.initState();
   }
@@ -63,7 +57,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     );
   }
 
-  var rcUserName;
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -154,9 +147,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               List<MessageModel> chatData = [];
-                              snapshot.data!.docs.forEach((element) {
+                              for (var element in snapshot.data!.docs) {
                                 chatData.add(MessageModel.fromJson(element.data()));
-                              });
+                              }
                               return chatData.isEmpty
                                   ? Center(
                                       child: Column(
@@ -197,26 +190,28 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                           itemBuilder: (context, index) {
                                             return InkWell(
                                               onLongPress: () {
-                                                showGeneralDialog(
-                                                    context: context,
-                                                    transitionBuilder: (context, a1, a2, widget) {
-                                                      return Transform.scale(
-                                                        scale: a1.value,
-                                                        child: Opacity(
-                                                          opacity: a1.value,
-                                                          child: widget,
-                                                        ),
-                                                      );
-                                                    },
-                                                    pageBuilder: (context, a1, a2) => AlertBox(onTap: () {
-                                                          Navigator.pop(context);
-                                                          FirebaseFirestore.instance
-                                                              .collection(Constants.userChats)
-                                                              .doc(wallController.chatId.value)
-                                                              .collection(wallController.chatId.value)
-                                                              .doc(chatData[index].timeStamp)
-                                                              .delete();
-                                                        }));
+                                                if (currentUser!.uid == chatData[index].msgFrom) {
+                                                  showGeneralDialog(
+                                                      context: context,
+                                                      transitionBuilder: (context, a1, a2, widget) {
+                                                        return Transform.scale(
+                                                          scale: a1.value,
+                                                          child: Opacity(
+                                                            opacity: a1.value,
+                                                            child: widget,
+                                                          ),
+                                                        );
+                                                      },
+                                                      pageBuilder: (context, a1, a2) => AlertBox(onTap: () {
+                                                            Navigator.pop(context);
+                                                            FirebaseFirestore.instance
+                                                                .collection(Constants.userChats)
+                                                                .doc(wallController.chatId.value)
+                                                                .collection(wallController.chatId.value)
+                                                                .doc(chatData[index].timeStamp)
+                                                                .delete();
+                                                          }));
+                                                }
                                               },
                                               // onTap: () {
                                               //   setState(() {});
@@ -263,7 +258,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   }
 
   Widget buildProfileImage() {
-    final profileImgUrl = widget.userData.profileImg ?? null;
+    final profileImgUrl = widget.userData.profileImg;
 
     if (profileImgUrl != null && Uri.parse(profileImgUrl).isAbsolute) {
       return CachedNetworkImage(

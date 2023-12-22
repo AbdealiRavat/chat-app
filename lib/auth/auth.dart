@@ -74,7 +74,7 @@ class AuthPage extends StatefulWidget {
 class _AuthPageState extends State<AuthPage> {
   @override
   void initState() {
-    Timer(Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 2), () {
       checkSignIn();
     });
     super.initState();
@@ -82,9 +82,9 @@ class _AuthPageState extends State<AuthPage> {
 
   checkSignIn() {
     if (FirebaseAuth.instance.currentUser != null) {
-      Get.offAll(() => HomePage());
+      Get.offAll(() => const HomePage());
     } else {
-      Get.offAll(() => LoginPage());
+      Get.offAll(() => const LoginPage());
     }
   }
 

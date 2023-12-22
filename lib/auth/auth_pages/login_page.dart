@@ -93,11 +93,11 @@ class _LoginPageState extends State<LoginPage> {
                   MyTextField(
                       controller: emailTextController,
                       hintText: 'Email',
-                      // focusNode: emailFocusNode,
-                      // focusChange: () {
-                      //   emailFocusNode.unfocus();
-                      //   FocusScope.of(context).requestFocus(passwordFocusNode);
-                      // },
+                      focusNode: emailFocusNode,
+                      focusChange: () {
+                        emailFocusNode.unfocus();
+                        FocusScope.of(context).requestFocus(passwordFocusNode);
+                      },
                       tColor: Colors.white,
                       obscureText: false,
                       isHidden: false,
@@ -105,10 +105,10 @@ class _LoginPageState extends State<LoginPage> {
                   MyTextField(
                       controller: passwordController,
                       hintText: 'Password',
-                      // focusNode: passwordFocusNode,
-                      // focusChange: () {
-                      //   passwordFocusNode.unfocus();
-                      // },
+                      focusNode: passwordFocusNode,
+                      focusChange: () {
+                        passwordFocusNode.unfocus();
+                      },
                       tColor: Colors.white,
                       obscureText: true,
                       isHidden: true,

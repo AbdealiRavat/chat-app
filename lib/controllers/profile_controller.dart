@@ -99,7 +99,8 @@ class ProfileController extends GetxController {
         'profileImg': imgUrl.value,
       }).then((value) => isLoading.value = false);
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
+      const Center(child: Text('error'));
     }
   }
 }

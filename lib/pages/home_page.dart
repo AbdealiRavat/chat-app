@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         Get.to(() => const CurrentUserProfilePage());
                         // authController.signOut(context);
                       },
-                      child: Container(
+                      child: SizedBox(
                         height: 45.h,
                         width: 45.w,
                         child: buildProfileImage(),
@@ -109,7 +109,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             ),
             Expanded(
               child: StreamBuilder(
-                  stream: FirebaseFirestore.instance.collection(Constants.users).snapshots(),
+                  stream: FirebaseFirestore.instance.collection(Constants.users).orderBy('status').snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       // List<UserModel> user = [];
@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       //   user.add(UserModel.fromJson(element.data()));
                       // });
                       final data = snapshot.data?.docs;
-                      var usersList = wallController.usersList.value;
+                      List usersList = wallController.usersList;
                       usersList = data?.map((e) => UserModel.fromJson(e.data())).toList() ?? [];
                       if (usersList.isNotEmpty) {
                         return ListView.builder(

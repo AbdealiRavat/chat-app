@@ -112,7 +112,7 @@ class _PostTextFieldState extends State<PostTextField> {
                 SizedBox(
                   width: 10.w,
                 ),
-                iconsButton('asset/gallery.png', 'Gallery'),
+                iconsButton('asset/document.png', 'Gallery'),
               ],
             ),
           );

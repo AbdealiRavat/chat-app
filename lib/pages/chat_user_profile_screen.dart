@@ -34,7 +34,7 @@ class _ChatUserProfileScreenState extends State<ChatUserProfileScreen> {
           padding: EdgeInsets.only(bottom: 15.h, top: 50.h),
           margin: EdgeInsets.only(bottom: 25.h),
           decoration: BoxDecoration(
-              image: DecorationImage(
+              image: const DecorationImage(
                   // invertColors: true,
                   fit: BoxFit.cover,
                   image: AssetImage(
@@ -67,7 +67,7 @@ class _ChatUserProfileScreenState extends State<ChatUserProfileScreen> {
                 height: 40.h,
               ),
               Center(
-                child: Container(width: 120.h, height: 120.h, child: buildProfileImage()),
+                child: SizedBox(width: 120.h, height: 120.h, child: buildProfileImage()),
               ),
               SizedBox(
                 height: 10.h,
@@ -121,7 +121,7 @@ class _ChatUserProfileScreenState extends State<ChatUserProfileScreen> {
   Widget buildProfileImage() {
     String profileImgUrl = widget.userData.profileImg.toString();
     if (profileImgUrl.isNotEmpty) {
-      print("Profile Image URL: $profileImgUrl");
+      // print("Profile Image URL: $profileImgUrl");
 
       return CachedNetworkImage(
         imageUrl: profileImgUrl,
@@ -144,7 +144,6 @@ class _ChatUserProfileScreenState extends State<ChatUserProfileScreen> {
         errorWidget: (context, url, error) => const Icon(Icons.error),
       );
     } else {
-      print("Profile Image URL: $profileImgUrl");
 
       return Container(
         height: 70.h,

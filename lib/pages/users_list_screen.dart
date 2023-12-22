@@ -38,9 +38,9 @@ class UsersListScreen extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 List<UserModel> data = [];
-                snapshot.data!.docs.forEach((element) {
+                for (var element in snapshot.data!.docs) {
                   data.add(UserModel.fromJson(element.data()));
-                });
+                }
                 return ListView.builder(
                     shrinkWrap: true,
                     physics: const BouncingScrollPhysics(),

@@ -33,7 +33,7 @@ class AuthController extends GetxController {
             .get()
             .then((DocumentSnapshot doc) async {
           UserModel user = UserModel.fromJson(doc.data() as Map<String, dynamic>);
-          print(user);
+          // print(user);
           profileImg(user.profileImg ?? "");
           userName(user.userName.toString().capitalizeFirst ?? "");
           await Constants.prefs.setString(Constants.userName, user.userName ?? "");
@@ -46,7 +46,7 @@ class AuthController extends GetxController {
       });
     } on FirebaseAuthException catch (e) {
       isLoading(false);
-      print(e.message);
+      // print(e.message);
       errorMessage.value = e.message.toString();
     }
   }
