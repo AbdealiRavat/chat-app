@@ -10,6 +10,7 @@ class WallPost extends StatefulWidget {
   final String postId;
   final String timeStamp;
   bool showTime;
+  bool isRead;
   String imgPost;
 
   WallPost({
@@ -20,6 +21,7 @@ class WallPost extends StatefulWidget {
     required this.postId,
     required this.timeStamp,
     required this.showTime,
+    required this.isRead,
     required this.imgPost,
   });
 
@@ -64,7 +66,7 @@ class _WallPostState extends State<WallPost> {
                 : EdgeInsets.symmetric(horizontal: 6.w, vertical: 6.h),
             margin: EdgeInsets.only(left: 16.w, right: 16.w, top: 6.h, bottom: 6.h),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: currentUser.uid == widget.currentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
               children: [
                 IntrinsicWidth(
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
@@ -103,9 +105,9 @@ class _WallPostState extends State<WallPost> {
                     ),
                     currentUser.uid == widget.currentUser
                         ? Icon(
-                            true ? Icons.done_rounded : Icons.done_all_rounded,
+                            !widget.isRead ? Icons.done_rounded : Icons.done_all_rounded,
                             size: 15.w,
-                            color: true ? Colors.deepPurple : Colors.blueAccent,
+                            color: !widget.isRead ? Colors.deepPurple : Colors.blueAccent,
                           )
                         : SizedBox(
                             width: 0.w,

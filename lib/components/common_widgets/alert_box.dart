@@ -16,6 +16,9 @@ class AlertBox extends StatelessWidget {
       ),
       buttonPadding: EdgeInsets.symmetric(horizontal: 40.w),
       actionsPadding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 20.h),
+      // content: Container(
+      //   child: Text('fefewfwefwefwef'),
+      // ),
       actions: [
         InkWell(
             onTap: onTap,

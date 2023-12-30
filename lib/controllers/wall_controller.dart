@@ -25,6 +25,10 @@ class WallController extends GetxController {
 
   postMessage(textController, UserModel userData) async {
     var timeStamp = DateTime.now().millisecondsSinceEpoch.toString();
+
+    List<Read> tempRead = [];
+    tempRead.add(Read(isRead: false, readTime: timeStamp, readBy: userData.id.toString()));
+
     MessageModel messageModel = MessageModel(
         id: timeStamp,
         message: textController.text.trimLeft().trimRight(),
@@ -32,15 +36,18 @@ class WallController extends GetxController {
         msgFrom: FirebaseAuth.instance.currentUser!.uid,
         msgTo: userData.id.toString(),
         timeStamp: timeStamp,
-        isRead: false);
+        read: tempRead);
     if (textController.text.isNotEmpty && textController.text.trim().isNotEmpty) {
-      FirebaseFirestore.instance
-          .collection(Constants.userChats)
-          .doc(chatId.value)
-          .collection(chatId.value)
-          .doc(timeStamp)
-          .set(messageModel.toJson());
-
+      try {
+        FirebaseFirestore.instance
+            .collection(Constants.userChats)
+            .doc(chatId.value)
+            .collection(chatId.value)
+            .doc(timeStamp)
+            .set(messageModel.toJson());
+      } catch (e) {
+        print(e.toString());
+      }
       // await FirebaseFirestore.instance
       //     .collection(Constants.users)
       //     .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -65,10 +72,26 @@ class WallController extends GetxController {
     }
   }
 
+  readData(timeStamp, msgFrom) {
+    Read temp = Read(isRead: true, readTime: timeStamp, readBy: msgFrom.toString());
+    if (FirebaseAuth.instance.currentUser!.uid != msgFrom) {
+      FirebaseFirestore.instance
+          .collection(Constants.userChats)
+          .doc(chatId.value)
+          .collection(chatId.value)
+          .doc(timeStamp)
+          .update({
+        'read': [temp.toJson()]
+      });
+    }
+  }
+
   getImage(type, String msgTo) async {
     var timeStamp = DateTime.now().millisecondsSinceEpoch.toString();
     var image = await ImagePicker().pickImage(source: type == 'Camera' ? ImageSource.camera : ImageSource.gallery);
 
+    List<Read> tempRead = [];
+    tempRead.add(Read(isRead: false, readTime: timeStamp, readBy: msgTo.toString()));
     if (image == null) return;
     Get.back();
 
@@ -87,7 +110,7 @@ class WallController extends GetxController {
           msgFrom: FirebaseAuth.instance.currentUser!.uid,
           msgTo: msgTo.toString(),
           timeStamp: timeStamp,
-          isRead: false);
+          read: tempRead);
       FirebaseFirestore.instance
           .collection(Constants.userChats)
           .doc(chatId.toString())

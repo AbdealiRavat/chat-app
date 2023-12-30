@@ -55,7 +55,8 @@ class UsersListTile extends StatelessWidget {
                                   color: purple_secondary,
                                   child: Text(
                                     userData.userName.toString().substring(0, 1),
-                                    style: TextStyle(fontSize: 35.sp, color: white),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 33.sp, color: white),
                                   ));
                             },
                           ),
@@ -63,7 +64,7 @@ class UsersListTile extends StatelessWidget {
                       : Container(
                           height: 55.h,
                           width: 55.w,
-                          alignment: Alignment.center,
+                          // alignment: Alignment.center,
                           child: Text(
                             userData.userName.toString().substring(0, 1),
                             style: TextStyle(fontSize: 35.sp, color: white),

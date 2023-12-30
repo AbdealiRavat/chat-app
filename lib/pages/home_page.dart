@@ -1,12 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/components/cards/users_list_tile.dart';
 import 'package:chat_app/models/user_model.dart';
 import 'package:chat_app/pages/current_user_profile_page.dart';
 import 'package:chat_app/pages/users_list_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -43,7 +43,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     Constants.initializePref();
     Future.microtask(() async {
       authController.getUserData(Constants.initializePref());
-      // String? token = await FirebaseMessaging.instance.getToken();
+      String? token = await FirebaseMessaging.instance.getToken();
+      print(token);
       WidgetsBinding.instance.addObserver(this);
       authController.setStatus("Online");
     });
@@ -91,11 +92,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         Get.to(() => const CurrentUserProfilePage());
                         // authController.signOut(context);
                       },
-                      child: SizedBox(
-                        height: 45.h,
-                        width: 45.w,
-                        child: buildProfileImage(),
-                      )),
+                      child: Container(
+                          height: 40.h,
+                          width: 40.w,
+                          decoration: BoxDecoration(color: white.withOpacity(0.2), borderRadius: BorderRadius.circular(10.r)),
+                          child: Icon(
+                            Icons.menu,
+                            size: 25.w,
+                            color: Colors.white,
+                          ))),
                   Text(
                     'Let\'s Chat',
                     style: TextStyle(color: white, fontSize: 18.sp),
@@ -112,10 +117,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   stream: FirebaseFirestore.instance.collection(Constants.users).orderBy('status').snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      // List<UserModel> user = [];
-                      // snapshot.data!.docs.forEach((element) {
-                      //   user.add(UserModel.fromJson(element.data()));
-                      // });
                       final data = snapshot.data?.docs;
                       List usersList = wallController.usersList;
                       usersList = data?.map((e) => UserModel.fromJson(e.data())).toList() ?? [];
@@ -164,57 +165,42 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
   }
 
-  Widget buildProfileImage() {
-    // String? profileImgUrl = Constants.prefs.getString(Constants.profileImg);
-    //
-    // if (profileImgUrl != null && Uri.parse(profileImgUrl).isAbsolute) {
-    //   print("Loading image from URL: $profileImgUrl");
-    return Obx(() => authController.profileImg.isEmpty && profileController.profileImg.isEmpty
-        ? Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: white,
-              borderRadius: BorderRadius.circular(100.r),
-            ),
-            child: Text(
-              authController.userName.isEmpty ? '' : authController.userName.toString().substring(0, 1),
-              style: TextStyle(fontSize: 30.sp, color: purple_text),
-            ))
-        : CachedNetworkImage(
-            imageUrl: profileController.profileImg.isEmpty
-                ? authController.profileImg.toString()
-                : profileController.profileImg.toString(),
-            imageBuilder: (context, imageProvider) => Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  width: 1.5.w,
-                  color: white,
-                  strokeAlign: BorderSide.strokeAlignOutside,
-                ),
-                image: DecorationImage(
-                  image: imageProvider,
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: BorderRadius.circular(100.r),
-                color: white,
-              ),
-            ),
-            placeholder: (context, url) => CircularProgressIndicator(
-              color: purple_secondary,
-            ),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
-          ));
-    // } else {
-    //   return Container(
-    //       alignment: Alignment.center,
-    //       decoration: BoxDecoration(
-    //         color: white,
-    //         borderRadius: BorderRadius.circular(100.r),
-    //       ),
-    //       child: Text(
-    //         Constants.prefs.getString(Constants.userName).toString().substring(0, 1),
-    //         style: TextStyle(fontSize: 80.sp, color: purple_text),
-    //       )); // Placeholder or default image
-    // }
-  }
+  // Widget buildProfileImage() {
+  //   return Obx(() => authController.profileImg.isEmpty && profileController.profileImg.isEmpty
+  //       ? Container(
+  //           alignment: Alignment.center,
+  //           decoration: BoxDecoration(
+  //             color: white,
+  //             borderRadius: BorderRadius.circular(100.r),
+  //           ),
+  //           child: Text(
+  //             authController.userName.isEmpty ? '' : authController.userName.toString().substring(0, 1),
+  //             style: TextStyle(fontSize: 30.sp, color: purple_text),
+  //           ))
+  //       : CachedNetworkImage(
+  //           imageUrl: profileController.profileImg.isEmpty
+  //               ? authController.profileImg.toString()
+  //               : profileController.profileImg.toString(),
+  //           imageBuilder: (context, imageProvider) => Container(
+  //             decoration: BoxDecoration(
+  //               border: Border.all(
+  //                 width: 1.5.w,
+  //                 color: white,
+  //                 strokeAlign: BorderSide.strokeAlignOutside,
+  //               ),
+  //               image: DecorationImage(
+  //                 image: imageProvider,
+  //                 fit: BoxFit.cover,
+  //               ),
+  //               borderRadius: BorderRadius.circular(100.r),
+  //               color: white,
+  //             ),
+  //           ),
+  //           placeholder: (context, url) => CircularProgressIndicator(
+  //             color: purple_secondary,
+  //           ),
+  //           errorWidget: (context, url, error) => const Icon(Icons.error),
+  //         ));
+  //
+  // }
 }

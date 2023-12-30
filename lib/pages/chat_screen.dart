@@ -188,6 +188,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                           itemCount: chatData.length,
                                           controller: listViewController,
                                           itemBuilder: (context, index) {
+                                            wallController.readData(chatData[index].timeStamp, chatData[index].msgFrom);
                                             return InkWell(
                                               onLongPress: () {
                                                 if (currentUser!.uid == chatData[index].msgFrom) {
@@ -218,16 +219,17 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                               //   showTime = !showTime;
                                               // },
                                               child: WallPost(
-                                                message: chatData[index].message.toString(),
-                                                imgPost: chatData[index].imgMessage.toString(),
-                                                currentUser: chatData[index].msgFrom.toString(),
-                                                rcvUser: chatData[index].msgTo.toString(),
-                                                timeStamp: chatData[index].timeStamp.toString(),
-                                                showTime: showTime,
-                                                postId: chatData[index].id.toString(),
-                                                // likes: List<String>.from(post['Likes'] ?? []),
-                                                // isLiked: post['Likes'].contains(currentUser.currentUser!.email),
-                                              ),
+                                                  message: chatData[index].message.toString(),
+                                                  imgPost: chatData[index].imgMessage.toString(),
+                                                  currentUser: chatData[index].msgFrom.toString(),
+                                                  rcvUser: chatData[index].msgTo.toString(),
+                                                  timeStamp: chatData[index].timeStamp.toString(),
+                                                  showTime: showTime,
+                                                  postId: chatData[index].id.toString(),
+                                                  isRead: chatData[index].read![0].isRead!
+                                                  // likes: List<String>.from(post['Likes'] ?? []),
+                                                  // isLiked: post['Likes'].contains(currentUser.currentUser!.email),
+                                                  ),
                                             );
                                           }),
                                     );
@@ -285,11 +287,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       return Container(
         height: 45.h,
         width: 45.w,
+        // padding: EdgeInsets.all(12.w),
         alignment: Alignment.center,
         decoration: BoxDecoration(color: white.withOpacity(0.9), shape: BoxShape.circle),
         child: Text(
           widget.userData.userName.toString().substring(0, 1),
-          style: TextStyle(fontSize: 35.sp, color: bg_purple),
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 33.sp, color: bg_purple),
         ),
       );
     }
