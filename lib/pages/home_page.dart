@@ -6,7 +6,6 @@ import 'package:chat_app/pages/current_user_profile_page.dart';
 import 'package:chat_app/pages/users_list_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -43,8 +42,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     Constants.initializePref();
     Future.microtask(() async {
       authController.getUserData(Constants.initializePref());
-      String? token = await FirebaseMessaging.instance.getToken();
-      print(token);
+      await authController.getToken();
       WidgetsBinding.instance.addObserver(this);
       authController.setStatus("Online");
     });

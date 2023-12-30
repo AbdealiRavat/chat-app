@@ -1,6 +1,7 @@
 import 'package:chat_app/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,7 @@ class AuthController extends GetxController {
   RxBool didPasswordMatch = true.obs;
   RxString errorMessage = ''.obs;
   RxBool isLoading = false.obs;
+  RxString token = ''.obs;
 
   RxString userName = ''.obs;
   RxString bio = ''.obs;
@@ -105,13 +107,26 @@ class AuthController extends GetxController {
     }
   }
 
+  static FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  Future<void> getToken() async {
+    await messaging.requestPermission();
+
+    await messaging.getToken().then((val) {
+      if (val != null) {
+        token.value = val.toString();
+      }
+    });
+    // print(token);
+  }
+
   signOut(context) async {
     setStatus(DateTime.now().toString());
-    await Constants.prefs.setString(Constants.userName, '');
-    await Constants.prefs.setString(Constants.bio, '');
-    await Constants.prefs.setString(Constants.profileImg, '');
-    profileImg.value = '';
     await Get.offAll(() => const LoginPage());
+    Constants.prefs.setString(Constants.userName, '');
+    Constants.prefs.setString(Constants.bio, '');
+    Constants.prefs.setString(Constants.profileImg, '');
+    profileImg.value = '';
     await FirebaseAuth.instance.signOut();
   }
 }
