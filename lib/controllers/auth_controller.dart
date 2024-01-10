@@ -23,11 +23,14 @@ class AuthController extends GetxController {
   RxString profileImg = ''.obs;
   RxString imgUrl = ''.obs;
 
+  static FirebaseMessaging messaging = FirebaseMessaging.instance;
+
   void signIn(context, emailTextController, passwordController) async {
     isLoading(true);
     try {
       await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: emailTextController.text.trim(), password: passwordController.text.trim())
+          .signInWithEmailAndPassword(
+              email: emailTextController.text.trim(), password: passwordController.text.trim())
           .then((value) async {
         FirebaseFirestore.instance
             .collection(Constants.users)
@@ -63,8 +66,8 @@ class AuthController extends GetxController {
 
     isLoading(true);
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: emailTextController.text.trim(), password: passwordController.text.trim());
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailTextController.text.trim(), password: passwordController.text.trim());
       String userName = emailTextController.text.toString().capitalizeFirst!.split('@')[0];
       String email = emailTextController.text.trim();
       UserModel userData = UserModel(
@@ -74,6 +77,7 @@ class AuthController extends GetxController {
           email: email,
           profileImg: '',
           status: DateTime.now().toString(),
+          fcmToken: '',
           timeStamp: DateTime.now().toString(),
           chattingWith: null);
       await FirebaseFirestore.instance
@@ -101,23 +105,44 @@ class AuthController extends GetxController {
 
   setStatus(String status) {
     if (FirebaseAuth.instance.currentUser != null) {
-      FirebaseFirestore.instance.collection(Constants.users).doc(FirebaseAuth.instance.currentUser!.uid).update({
+      FirebaseFirestore.instance
+          .collection(Constants.users)
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({
         'status': status,
       });
     }
   }
 
-  static FirebaseMessaging messaging = FirebaseMessaging.instance;
-
   Future<void> getToken() async {
     await messaging.requestPermission();
 
-    await messaging.getToken().then((val) {
+    await messaging.getToken().then((val) async {
       if (val != null) {
         token.value = val.toString();
+        if (FirebaseAuth.instance.currentUser != null) {
+          FirebaseFirestore.instance
+              .collection(Constants.users)
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .update({
+            'fcmToken': val.toString(),
+          });
+        }
+        await Constants.prefs.setString('fcmToken', val.toString());
       }
     });
     // print(token);
+  }
+
+  setToken() {
+    if (FirebaseAuth.instance.currentUser != null) {
+      FirebaseFirestore.instance
+          .collection(Constants.users)
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({
+        'fcmToken': token.value,
+      });
+    }
   }
 
   signOut(context) async {

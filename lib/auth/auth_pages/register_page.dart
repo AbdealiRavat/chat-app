@@ -153,8 +153,11 @@ class _RegisterPageState extends State<RegisterPage> {
                           authController.isPasswordEmpty.value = password.isEmpty;
                           authController.didPasswordMatch.value = (password == confirmPassword);
 
-                          if (email.isNotEmpty && password.isNotEmpty && (password == confirmPassword)) {
-                            authController.signUp(context, emailTextController, passwordController, confirmPasswordController);
+                          if (email.isNotEmpty &&
+                              password.isNotEmpty &&
+                              (password == confirmPassword)) {
+                            authController.signUp(context, emailTextController, passwordController,
+                                confirmPasswordController);
                           }
                         },
                         text: 'Sign Up',
@@ -170,7 +173,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Already a member?', style: TextStyle(color: Colors.white.withOpacity(0.7))),
+                        Text('Already a member?',
+                            style:
+                                TextStyle(fontSize: 16.sp, color: Colors.white.withOpacity(0.7))),
                         SizedBox(width: 15.w),
                         InkWell(
                             onTap: () {
@@ -180,8 +185,9 @@ class _RegisterPageState extends State<RegisterPage> {
                               //   MaterialPageRoute(builder: (context) => LoginPage()),
                               // );
                             },
-                            child:
-                                Text('Login here', style: TextStyle(color: white, fontSize: 16.sp, fontWeight: FontWeight.w900))),
+                            child: Text('Login here',
+                                style: TextStyle(
+                                    color: white, fontSize: 16.sp, fontWeight: FontWeight.w900))),
                       ],
                     ),
                   )

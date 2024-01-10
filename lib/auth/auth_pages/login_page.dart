@@ -155,7 +155,9 @@ class _LoginPageState extends State<LoginPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Not a member?', style: TextStyle(color: Colors.white.withOpacity(0.7))),
+                        Text('Not a member?',
+                            style:
+                                TextStyle(fontSize: 16.sp, color: Colors.white.withOpacity(0.7))),
                         SizedBox(
                           width: 15.w,
                         ),
@@ -168,7 +170,8 @@ class _LoginPageState extends State<LoginPage> {
                               // );
                             },
                             child: Text('Register here',
-                                style: TextStyle(color: white, fontSize: 16.sp, fontWeight: FontWeight.w900))),
+                                style: TextStyle(
+                                    color: white, fontSize: 16.sp, fontWeight: FontWeight.w900))),
                       ],
                     ),
                   )

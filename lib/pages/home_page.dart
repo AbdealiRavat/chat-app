@@ -45,6 +45,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       await authController.getToken();
       WidgetsBinding.instance.addObserver(this);
       authController.setStatus("Online");
+      authController.setToken();
     });
     super.initState();
   }
@@ -93,7 +94,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       child: Container(
                           height: 40.h,
                           width: 40.w,
-                          decoration: BoxDecoration(color: white.withOpacity(0.2), borderRadius: BorderRadius.circular(10.r)),
+                          decoration: BoxDecoration(
+                              color: white.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(10.r)),
                           child: Icon(
                             Icons.menu,
                             size: 25.w,
@@ -112,7 +115,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             ),
             Expanded(
               child: StreamBuilder(
-                  stream: FirebaseFirestore.instance.collection(Constants.users).orderBy('status').snapshots(),
+                  stream: FirebaseFirestore.instance
+                      .collection(Constants.users)
+                      .orderBy('status')
+                      .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       final data = snapshot.data?.docs;

@@ -44,7 +44,7 @@ class _MyTextFieldState extends State<MyTextField> {
         onEditingComplete: () {
           widget.focusChange!();
         },
-        style: TextStyle(color: widget.tColor),
+        style: TextStyle(fontSize: 15.sp, color: widget.tColor),
         decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
             hintText: widget.hintText,
@@ -68,10 +68,12 @@ class _MyTextFieldState extends State<MyTextField> {
             // ),
             filled: true,
             fillColor: purple_secondary.withOpacity(0.95),
-            enabledBorder: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.circular(25.r)),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide.none, borderRadius: BorderRadius.circular(25.r)),
             focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: white.withOpacity(0.8), width: 0.5), borderRadius: BorderRadius.circular(25.r)),
-            hintStyle: TextStyle(color: Colors.grey[500])),
+                borderSide: BorderSide(color: white.withOpacity(0.8), width: 0.5),
+                borderRadius: BorderRadius.circular(25.r)),
+            hintStyle: TextStyle(fontSize: 15.sp, color: Colors.grey[500])),
       ),
     );
   }

@@ -5,6 +5,7 @@ class UserModel {
   String? profileImg;
   String? bio;
   String? status;
+  String? fcmToken;
   List<ChattingWith>? chattingWith;
   String? timeStamp;
 
@@ -15,6 +16,7 @@ class UserModel {
     this.profileImg,
     this.bio,
     this.status,
+    this.fcmToken,
     this.chattingWith,
     this.timeStamp,
   });
@@ -27,6 +29,7 @@ class UserModel {
     profileImg = json['profileImg'];
     bio = json['bio'];
     status = json['status'];
+    fcmToken = json['fcmToken'];
     if (json['chattingWith'] != null && json['chattingWith'].length != 0) {
       json["chattingWith"].forEach((element) {
         tempList.add(ChattingWith.fromJson(element));
@@ -44,6 +47,7 @@ class UserModel {
     json['profileImg'] = profileImg;
     json['bio'] = bio;
     json['status'] = status;
+    json['fcmToken'] = fcmToken;
     json['chattingWith'] = chattingWith;
     json['timeStamp'] = timeStamp;
 

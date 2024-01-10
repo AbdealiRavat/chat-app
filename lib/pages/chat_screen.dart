@@ -81,8 +81,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                 children: [
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-                    decoration:
-                        BoxDecoration(color: bg_purple, borderRadius: BorderRadius.vertical(bottom: Radius.circular(25.r))),
+                    decoration: BoxDecoration(
+                        color: bg_purple,
+                        borderRadius: BorderRadius.vertical(bottom: Radius.circular(25.r))),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -115,12 +116,14 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                 children: [
                                   Text(
                                     widget.userData.userName.toString(),
-                                    style: TextStyle(color: white, fontSize: 18.sp, fontWeight: FontWeight.w600),
+                                    style: TextStyle(
+                                        color: white, fontSize: 18.sp, fontWeight: FontWeight.w600),
                                   ),
                                   Text(
                                     widget.userData.status == 'Online'
                                         ? widget.userData.status.toString()
-                                        : DateFormat('hh:mm a').format(DateTime.parse(widget.userData.status.toString())),
+                                        : DateFormat('hh:mm a').format(
+                                            DateTime.parse(widget.userData.status.toString())),
                                     style: TextStyle(color: white, fontSize: 14.sp),
                                   )
                                 ],
@@ -157,7 +160,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                         children: [
                                           const Text(
                                             'No Data Found!',
-                                            style: TextStyle(fontSize: 25, color: Colors.black, fontWeight: FontWeight.w400),
+                                            style: TextStyle(
+                                                fontSize: 25,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w400),
                                           ),
                                           const SizedBox(
                                             height: 15,
@@ -168,11 +174,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                             },
                                             child: Container(
                                               padding: const EdgeInsets.all(8),
-                                              decoration:
-                                                  BoxDecoration(color: deep_purple, borderRadius: BorderRadius.circular(5)),
+                                              decoration: BoxDecoration(
+                                                  color: deep_purple,
+                                                  borderRadius: BorderRadius.circular(5)),
                                               child: Text(
                                                 'Start Conversation',
-                                                style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                                                style:
+                                                    TextStyle(fontSize: 16.sp, color: Colors.white),
                                               ),
                                             ),
                                           ),
@@ -188,7 +196,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                           itemCount: chatData.length,
                                           controller: listViewController,
                                           itemBuilder: (context, index) {
-                                            wallController.readData(chatData[index].timeStamp, chatData[index].msgFrom);
+                                            wallController.readData(
+                                                chatData[index].timeStamp, chatData[index].msgFrom);
                                             return InkWell(
                                               onLongPress: () {
                                                 if (currentUser!.uid == chatData[index].msgFrom) {
@@ -203,12 +212,14 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                                           ),
                                                         );
                                                       },
-                                                      pageBuilder: (context, a1, a2) => AlertBox(onTap: () {
+                                                      pageBuilder: (context, a1, a2) =>
+                                                          AlertBox(onTap: () {
                                                             Navigator.pop(context);
                                                             FirebaseFirestore.instance
                                                                 .collection(Constants.userChats)
                                                                 .doc(wallController.chatId.value)
-                                                                .collection(wallController.chatId.value)
+                                                                .collection(
+                                                                    wallController.chatId.value)
                                                                 .doc(chatData[index].timeStamp)
                                                                 .delete();
                                                           }));
@@ -269,7 +280,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           height: 45.h,
           width: 45.w,
           decoration: BoxDecoration(
-            border: Border.all(width: 1.5.w, color: white, strokeAlign: BorderSide.strokeAlignOutside),
+            border:
+                Border.all(width: 1.5.w, color: white, strokeAlign: BorderSide.strokeAlignOutside),
             image: DecorationImage(
               image: imageProvider,
               fit: BoxFit.cover,
@@ -291,7 +303,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         alignment: Alignment.center,
         decoration: BoxDecoration(color: white.withOpacity(0.9), shape: BoxShape.circle),
         child: Text(
-          widget.userData.userName.toString().substring(0, 1),
+          widget.userData.userName.toString().substring(0, 1).toString(),
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 33.sp, color: bg_purple),
         ),

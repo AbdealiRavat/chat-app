@@ -19,12 +19,11 @@ class MyButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-          width: 180.w,
-          height: 55.h,
-          padding: EdgeInsets.symmetric(vertical: isLoading ? 10.h : 18.h),
+          // width: 180.w,
+          // height: 55.h,
+          padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 5.w),
           margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 60.w),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25.r), color: Colors.white),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(25.r), color: Colors.white),
           child: Center(
             child: isLoading
                 ? CircularProgressIndicator(
@@ -33,7 +32,7 @@ class MyButton extends StatelessWidget {
                   )
                 : Text(
                     text,
-                    style: TextStyle(fontSize: 15.sp),
+                    style: TextStyle(fontSize: 14.sp),
                   ),
           )),
     );

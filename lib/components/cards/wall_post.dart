@@ -44,7 +44,9 @@ class _WallPostState extends State<WallPost> {
     return Align(
       alignment: (currentUser.uid == widget.currentUser ? Alignment.topRight : Alignment.topLeft),
       child: Column(
-        crossAxisAlignment: currentUser.uid == widget.currentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment: currentUser.uid == widget.currentUser
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start,
         children: [
           Container(
             constraints: BoxConstraints(
@@ -52,12 +54,16 @@ class _WallPostState extends State<WallPost> {
               minWidth: MediaQuery.sizeOf(context).width * 0.15,
             ),
             decoration: BoxDecoration(
-                color: currentUser.uid == widget.currentUser ? Colors.deepPurple.shade100 : Colors.white,
+                color: currentUser.uid == widget.currentUser
+                    ? Colors.deepPurple.shade100
+                    : Colors.white,
                 boxShadow: [
                   BoxShadow(
                       color: Colors.blueGrey.shade50,
                       blurRadius: currentUser.uid == widget.currentUser ? 0 : 3,
-                      offset: currentUser.uid == widget.currentUser ? const Offset(0, 0) : const Offset(0.8, 1.1),
+                      offset: currentUser.uid == widget.currentUser
+                          ? const Offset(0, 0)
+                          : const Offset(0.8, 1.1),
                       spreadRadius: 0.1)
                 ],
                 borderRadius: BorderRadius.circular(10.r)),
@@ -66,30 +72,38 @@ class _WallPostState extends State<WallPost> {
                 : EdgeInsets.symmetric(horizontal: 6.w, vertical: 6.h),
             margin: EdgeInsets.only(left: 16.w, right: 16.w, top: 6.h, bottom: 6.h),
             child: Column(
-              crossAxisAlignment: currentUser.uid == widget.currentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              crossAxisAlignment: currentUser.uid == widget.currentUser
+                  ? CrossAxisAlignment.end
+                  : CrossAxisAlignment.start,
               children: [
                 IntrinsicWidth(
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-                  widget.imgPost.isEmpty
-                      ? Text(
-                          widget.message.toString(),
-                          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400, color: Colors.grey[800]),
-                        )
-                      : Container(
-                          constraints: const BoxConstraints(
-                            minHeight: 50,
-                            maxHeight: 200,
-                            minWidth: double.infinity,
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.r),
-                            child: Image.network(
-                              widget.imgPost,
-                              fit: BoxFit.cover,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                      widget.imgPost.isEmpty
+                          ? Text(
+                              widget.message.toString(),
+                              style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey[800]),
+                            )
+                          : Container(
+                              constraints: const BoxConstraints(
+                                minHeight: 50,
+                                maxHeight: 200,
+                                minWidth: double.infinity,
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.r),
+                                child: Image.network(
+                                  widget.imgPost,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                ])),
+                    ])),
                 SizedBox(height: widget.imgPost.isEmpty ? 1.h : 5.h),
                 Row(
                   mainAxisSize: MainAxisSize.min,
@@ -98,7 +112,10 @@ class _WallPostState extends State<WallPost> {
                       // timeago.format(widget.timeStamp.toDate(), allowFromNow: true),
                       format.format(date),
                       style: TextStyle(
-                          fontStyle: FontStyle.italic, fontSize: 10.sp, fontWeight: FontWeight.w400, color: Colors.grey.shade700),
+                          fontStyle: FontStyle.italic,
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.grey.shade700),
                     ),
                     SizedBox(
                       width: 5.w,
